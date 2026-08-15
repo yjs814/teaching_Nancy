@@ -17,28 +17,24 @@ h1{margin:0;font-size:clamp(29px,4vw,43px);line-height:1.15;color:#5b4039}
 .mascot-wrap{position:relative;width:280px;height:155px}.bear-art{position:absolute;right:0;top:0;width:205px;height:155px;filter:drop-shadow(0 8px 8px #73584f20);animation:float 3s ease-in-out infinite}.abc-big{position:absolute;left:0;bottom:2px;font:900 48px/1 "Arial Rounded MT Bold",Arial,sans-serif;letter-spacing:-4px;transform:rotate(-5deg)}.abc-big .a{color:#e986a4}.abc-big .b{color:#8d75cf}.abc-big .c{color:#67a988}
 .sparkle{position:absolute;font-size:24px;animation:twinkle 2s ease-in-out infinite}.s1{right:185px;top:20px}.s2{right:25px;bottom:16px;animation-delay:.7s}.flower{position:absolute;left:52%;bottom:13px;font-size:22px;transform:rotate(-12deg)}
 .lessons{margin-top:13px;padding:18px 22px 24px}
-.lessons h2{margin:0;text-align:center;font-size:23px;color:#5b4039}.hint{text-align:center;margin:4px 0 15px;color:#9b7e75;font-size:13px}
-.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.card{display:flex;flex-direction:column;min-width:0;padding:8px;border:2px solid #fff;border-radius:18px;color:var(--ink);text-decoration:none;background:#fff6df;box-shadow:0 4px 0 #ead3a0;transition:.18s}
-.card:nth-child(3n+2){background:#f3efff;box-shadow:0 4px 0 #d5c9ef}.card:nth-child(3n){background:#ffeef2;box-shadow:0 4px 0 #efcfd8}
-.card:hover{transform:translateY(-3px);box-shadow:0 8px 16px #73584f1d}
-.cover-wrap{height:145px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px}
-.cover{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
-.phonics-cover{background:linear-gradient(135deg,#fff3f5,#eee8ff);font:900 45px/1 "Arial Rounded MT Bold",Arial,sans-serif;letter-spacing:2px}.phonics-cover .vowel{color:#ee4848}.phonics-cover .consonant{color:#151515}
-.card-content{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:7px 3px 2px;min-height:62px}
-.card strong{font-size:13px;line-height:1.25;color:#5b4039}
-.card p{display:none}
-.go{margin-top:auto;padding:4px 9px;border-radius:999px;background:#fff;font-size:10px;font-weight:900;color:#7257a8}
+.lessons h2{margin:0;text-align:center;font-size:23px;color:#5b4039}.hint{text-align:center;margin:1px 0 13px;color:#9b7e75;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.card{position:relative;display:flex;flex-direction:column;min-height:150px;padding:17px;border:2px solid #fff;border-radius:22px;color:var(--ink);text-decoration:none;box-shadow:0 6px 0 #e8cbd1;transition:.2s}
+.card:nth-child(1){background:#fff0d1}.card:nth-child(2){background:#eee8ff;box-shadow:0 6px 0 #cfc3eb}.card:nth-child(3){background:#ffe8ed}.card:nth-child(4){background:#e5f5ed;box-shadow:0 6px 0 #bedecd}
+.card:hover{transform:translateY(-4px) rotate(-.4deg);box-shadow:0 10px 18px #73584f1d}.card:hover .icon{transform:rotate(-8deg) scale(1.1)}
+.topline{display:flex;align-items:center;gap:11px}.icon{display:grid;place-items:center;flex:0 0 48px;height:48px;border-radius:15px;background:#fff;font-size:25px;transition:.2s}.cover-thumb{flex:0 0 48px;width:48px;height:62px;object-fit:cover;border:3px solid #fff;border-radius:10px;box-shadow:0 3px 8px #73584f22}
+.card strong{font-size:17px;line-height:1.3;color:#5b4039}.card p{margin:10px 0 12px;font-size:13px;line-height:1.45;color:#8a7068}
+.go{margin-top:auto;align-self:flex-start;padding:4px 10px;border-radius:999px;background:#fff;font-size:12px;font-weight:900;color:#7257a8}
 footer{text-align:center;margin-top:10px;color:#a58a81;font-size:13px}
 @keyframes float{50%{transform:translateY(-7px) rotate(1deg)}}@keyframes twinkle{50%{transform:scale(.65);opacity:.45}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media(max-width:950px){.hero{grid-template-columns:1fr 230px}.mascot-wrap{width:225px}.bear-art{width:175px}.abc-big{font-size:40px}.grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:560px){.page{padding:9px 0 16px}.hero{grid-template-columns:1fr;padding:18px;text-align:center;min-height:auto}.mascot-wrap,.sparkle,.flower{display:none}.lessons{padding:14px 11px 18px}.grid{grid-template-columns:repeat(2,1fr);gap:8px}.cover-wrap{height:150px}.card{padding:7px}.card strong{font-size:12px}}
+@media(max-width:850px){.hero{grid-template-columns:1fr 230px}.mascot-wrap{width:225px}.bear-art{width:175px}.abc-big{font-size:40px}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.page{padding:9px 0 16px}.hero{grid-template-columns:1fr;padding:20px;text-align:center;min-height:auto}.mascot-wrap,.sparkle,.flower{display:none}.lessons{padding:16px 14px 20px}.grid{grid-template-columns:1fr}.card{min-height:112px;padding:14px}.card p{margin:6px 0 8px}}
 </style>
 </head>
 <body><main class="page">
 <section class="hero">
-  <div><p class="tag">WELCOME TO NANCY'S CLASS</p><h1>Nancy 老師的<br>單字練習小天地</h1><p class="intro">挑一本課本，跟著 Nancy 老師開心學英文吧！</p></div>
+  <div><p class="tag">WELCOME TO NANCY'S CLASS</p><h1>Nancy 老師的<br>單字練習小天地</h1><p class="intro">挑一個練習，跟著小熊開心學英文吧！</p></div>
   <div class="mascot-wrap"><svg class="bear-art" viewBox="0 0 180 160" role="img" aria-label="可愛粉彩小熊">
     <circle cx="43" cy="42" r="25" fill="#9c684b"/><circle cx="137" cy="42" r="25" fill="#9c684b"/>
     <circle cx="43" cy="42" r="13" fill="#f1aa79"/><circle cx="137" cy="42" r="13" fill="#f1aa79"/>
@@ -49,67 +45,20 @@ footer{text-align:center;margin-top:10px;color:#a58a81;font-size:13px}
     <path d="M82 94 Q90 88 98 94 Q96 103 90 103 Q84 103 82 94" fill="#55352f"/>
     <path d="M90 103 Q90 115 78 114 M90 103 Q90 115 102 114" fill="none" stroke="#55352f" stroke-width="3" stroke-linecap="round"/>
     <ellipse cx="48" cy="99" rx="10" ry="6" fill="#ef9cae" opacity=".75"/><ellipse cx="132" cy="99" rx="10" ry="6" fill="#ef9cae" opacity=".75"/>
-  </svg><div class="abc-big"><span class="a">A</span><span class="b">B</span><span class="c">C</span></div></div>
+  </svg><div class="abc-big" aria-label="ABC"><span class="a">A</span><span class="b">B</span><span class="c">C</span></div></div>
   <span class="sparkle s1">✨</span><span class="sparkle s2">⭐</span><span class="flower">🌸</span>
 </section>
-
-<section class="lessons">
-<h2>🌟 單字練習網站</h2>
-<p class="hint">選一本課本開始練習</p>
+<section class="lessons"><h2>🌟 單字練習網站</h2>
 <div class="grid">
-
-<a class="card" href="phonics-whiteboard.html">
-  <div class="cover-wrap phonics-cover" aria-label="Phonics 字母卡"><span class="vowel">a</span><span class="consonant">b</span><span class="consonant">c</span></div>
-  <div class="card-content"><strong>Nancy的Phonics 小白板</strong><p>字母拼讀與拼字練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="300_words_complete.html">
-  <div class="cover-wrap"><img class="cover" src="300.jfif?v=20260808-2" alt="國小必備300單字封面"></div>
-  <div class="card-content"><strong>國小必備300單字</strong><p>P1～P56 中英文單字聽讀與複習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="https://snorlax2026.github.io/teaching/word-puzzle/index.html">
-  <div class="cover-wrap"><img class="cover" src="2000.jpg?v=20260808-2" alt="小學生必備2000單字封面"></div>
-  <div class="card-content"><strong>小學生必備 2000 單字</strong><p>看中文、聽發音、挑戰英文拼字</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="boost_up_2.html">
-  <div class="cover-wrap"><img class="cover" src="boost up 2.jfif?v=20260808-2" alt="Boost Up 2 封面"></div>
-  <div class="card-content"><strong>Boost Up 2</strong><p>U1～U8 依 Lesson 練習單字、片語與拼字</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="come_on_everyone_2.html">
-  <div class="cover-wrap"><img class="cover" src="come on everyone 2.jfif?v=20260808-2" alt="Come On Everyone 2 封面"></div>
-  <div class="card-content"><strong>Come On Everyone 2</strong><p>U1～U8 單字發音與重組拼字練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="https://snorlax2026.github.io/teaching/Grammar_Space_Kids_3_nancy.html">
-  <div class="cover-wrap"><img class="cover" src="Grammar Space Kids 3.jfif?v=20260808-2" alt="Grammar Space Kids 3 封面"></div>
-  <div class="card-content"><strong>Grammar Space Kids 3</strong><p>課本單字發音練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="open_up_2.html">
-  <div class="cover-wrap"><img class="cover" src="Open Up 2.jfif?v=20260808-2" alt="Open Up 2 封面"></div>
-  <div class="card-content"><strong>Open Up 2</strong><p>U1～U8 中英文單字、發音與重組練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="oxford_discover_2.html">
-  <div class="cover-wrap"><img class="cover" src="Oxford Discover 2.jfif?v=20260808-2" alt="Oxford Discover 2 封面"></div>
-  <div class="card-content"><strong>Oxford Discover 2</strong><p>U1～U18 中英文單字與發音練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="oxford_phonics_world_4.html">
-  <div class="cover-wrap"><img class="cover" src="Oxford Phonics World 4.jfif?v=20260808-2" alt="Oxford Phonics World 4 封面"></div>
-  <div class="card-content"><strong>Oxford Phonics World 4</strong><p>U1～U8 Consonant Blends 發音與拼字練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-<a class="card" href="spotlight_reading_1.html">
-  <div class="cover-wrap"><img class="cover" src="spotlight reading1.jfif?v=20260808-2" alt="Spotlight Reading 1 封面"></div>
-  <div class="card-content"><strong>Spotlight Reading 1</strong><p>U1～U16 中英文單字、發音與重組拼字練習</p><span class="go">開始練習 →</span></div>
-</a>
-
-</div>
-</section>
-
+  <a class="card" href="300_words_complete.html"><span class="topline"><span class="icon">🍯</span><strong>國小必備300單字</strong></span><p>P1～P56 中英文單字聽讀與複習</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="https://snorlax2026.github.io/teaching/word-puzzle/index.html"><span class="topline"><span class="icon">🦁</span><strong>小學生必備 2000 單字</strong></span><p>看中文、聽發音、挑戰英文拼字</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="elementary_500_words.html"><span class="topline"><img class="cover-thumb" src="elementary_500_cover.jpg" alt="國小必學500英語單字封面"><strong>國小必學500英語單字</strong></span><p>目前收錄第 1 頁，可逐頁增加單字與拼字練習</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="boost_up_2.html"><span class="topline"><span class="icon">🚀</span><strong>Boost Up 2</strong></span><p>U1～U8 依 Lesson 練習單字、片語與拼字</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="tuesday_english_class.html"><span class="topline"><span class="icon">⚡</span><strong>Come On Everyone 2</strong></span><p>U1～U8 單字發音與拼字練習</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="https://snorlax2026.github.io/teaching/Grammar_Space_Kids_3_nancy.html"><span class="topline"><span class="icon">🎧</span><strong>Grammar Space Kids 3</strong></span><p>課本單字發音練習</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="open_up_2.html"><span class="topline"><span class="icon">🌈</span><strong>Open Up 2</strong></span><p>U1～U8 中英文單字、發音與重組練習</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="oxford_discover_2.html"><span class="topline"><span class="icon">📘</span><strong>Oxford Discover 2</strong></span><p>U1～U18 中英文單字與發音練習</p><span class="go">開始練習 →</span></a>
+  <a class="card" href="oxford_phonics_world_4.html"><span class="topline"><span class="icon">🔤</span><strong>Oxford Phonics World 4</strong></span><p>U1～U8 Consonant Blends 發音與拼字練習</p><span class="go">開始練習 →</span></a>
+</div></section>
 <footer>和 Nancy 老師一起開心學英文 ♡</footer>
 </main></body></html>
