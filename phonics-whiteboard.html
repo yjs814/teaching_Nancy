@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nancy的Phonics 小白板</title>
+  <style>
+    :root { --ink:#161616; --paper:#fff; --red:#e74747; --blue:#2456a6; --line:#d8e2ed; }
+    * { box-sizing:border-box; }
+    html, body { height:100%; overflow:hidden; }
+    body { margin:0; min-height:100vh; color:var(--ink); font-family:"Avenir Next","Nunito",Arial,sans-serif; background:#fff; }
+    button { font:inherit; }
+    .app { max-width:1280px; height:100dvh; margin:auto; padding:12px 20px; display:grid; grid-template-columns:1fr; grid-template-rows:auto minmax(0,1fr); gap:10px; }
+    .panel, .board { background:var(--paper); border:3px solid var(--ink); border-radius:24px; box-shadow:7px 7px 0 rgba(22,22,22,.13); }
+    .panel { padding:10px 16px; }
+    .heading { display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    h1 { margin:0; font-size:23px; letter-spacing:.02em; white-space:nowrap; }
+    .hint { margin:0; font-size:14px; line-height:1.45; color:#4a5563; }
+    .legend { display:flex; gap:12px; padding:0; font-size:13px; font-weight:800; white-space:nowrap; }
+    .dot { width:13px; height:13px; border-radius:50%; display:inline-block; margin-right:4px; vertical-align:-1px; }
+    .letters { display:grid; grid-template-columns:repeat(26, 1fr); gap:5px; margin-top:8px; }
+    .tile { min-height:45px; border:2px solid var(--ink); border-radius:11px; background:#fff; font-size:22px; font-weight:900; cursor:pointer; touch-action:manipulation; transition:transform .15s, box-shadow .15s; }
+    .tile:hover, .tile:focus-visible { transform:translateY(-3px); box-shadow:0 4px 0 rgba(22,22,22,.18); outline:none; }
+    .vowel { color:var(--red); } .consonant { color:var(--ink); }
+    .board { min-height:0; padding:14px 20px; display:flex; flex-direction:column; overflow:hidden; background:#fff; }
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .toolbar p { display:none; margin:0; font-size:15px; font-weight:800; }
+    .cursor-controls { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:800; }
+    .cursor-button { padding:7px 11px; border:2px solid var(--ink); border-radius:10px; background:#fff; font:inherit; cursor:pointer; }
+    .cursor-button.active { background:#fff0ad; box-shadow:inset 0 0 0 2px #f0b400; }
+    .actions { display:flex; gap:8px; }
+    .action { padding:9px 13px; border:2px solid var(--ink); border-radius:11px; background:white; font-size:14px; font-weight:800; cursor:pointer; }
+    .action:hover { background:#fff0ad; }
+    .keyboard-input { width:145px; padding:8px 10px; border:2px solid var(--ink); border-radius:11px; background:white; font:700 15px/1 Arial,sans-serif; }
+    .stage { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:4px 0; }
+    .dropzone { position:relative; width:100%; height:100%; display:flex; flex-wrap:nowrap; align-items:center; justify-content:center; gap:0; padding:14px 20px; overflow:hidden; border:0; background:transparent; text-align:center; transform:translateY(-26px); }
+    .empty { color:#637386; font-size:23px; font-weight:800; line-height:1.5; padding:30px; }
+    .card { flex:0 0 auto; display:flex; align-items:center; justify-content:center; padding:0; border:0; background:transparent; cursor:grab; user-select:none; animation:appear .18s ease-out; }
+    .card:active { cursor:grabbing; }
+    .card:hover, .card:focus-visible { transform:translateY(-4px); outline:none; }
+    .card.cursor-target .card-letter { text-decoration:underline 8px var(--blue); text-underline-offset:.13em; }
+    .card.drop-before { box-shadow:-7px 0 0 var(--blue); }
+    .card.drop-after { box-shadow:7px 0 0 var(--blue); }
+    .card-letter { display:block; padding:.03em .015em .08em; font-family:Arial,sans-serif; font-size:var(--letter-size, 220px); font-weight:900; line-height:.92; }
+    .footer { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; border-top:2px solid #cfdae4; padding-top:7px; font-size:13px; color:#566574; text-align:center; }
+    .footer-tools { display:flex; gap:8px; justify-self:start; }
+    .footer kbd { padding:2px 6px; border:1px solid #9eabb7; border-radius:5px; background:white; font-weight:800; }
+    @keyframes appear { from { opacity:0; transform:scale(.88) } to { opacity:1; transform:scale(1) } }
+    @media (max-width:960px) { .heading { flex-wrap:wrap; } .letters{grid-template-columns:repeat(13,1fr)} }
+    @media (max-width:760px) { .app{padding:12px; gap:12px}.panel{padding:12px}.heading{align-items:flex-start;gap:8px}.letters{grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}.tile{min-height:38px;font-size:21px}.board{padding:13px}.dropzone{padding:10px;transform:translateY(-12px)}.toolbar p{font-size:13px}.footer{font-size:12px;padding-top:8px}.footer-tools{gap:4px}.keyboard-input{width:108px}.footer .action{padding:8px 9px} }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <aside class="panel" aria-label="字母選擇區">
+      <div class="heading"><h1>Nancy的Phonics 小白板</h1><p class="hint">點選上方小寫字母可以拼出單字；點中央的字母即可移除。</p><div class="legend"><span><i class="dot" style="background:#e74747"></i>母音</span><span><i class="dot" style="background:#161616"></i>子音</span></div></div>
+      <div class="letters" id="letters"></div>
+    </aside>
+    <section class="board" aria-label="字卡白板">
+      <div class="toolbar"><div class="cursor-controls"><span>游標位置：</span><button class="cursor-button" id="cursor-start">字首</button><button class="cursor-button" id="cursor-end">字尾</button><button class="cursor-button" id="cursor-cancel">取消</button></div><div class="actions"><button class="action" id="clear">清空</button></div></div>
+      <div class="stage"><div class="dropzone" id="dropzone" aria-label="字母白板"><div class="empty">點一個字母<br>開始練習吧！</div></div></div>
+      <div class="footer"><span></span><span>按 <kbd>Esc</kbd> 清空白板</span><div class="footer-tools"><input class="keyboard-input" id="keyboard-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="20" placeholder="鍵盤輸入單字" aria-label="鍵盤輸入單字"><button class="action" id="add-typed">加入</button></div></div>
+    </section>
+  </main>
+  <script>
+    const vowels = new Set(['a','e','i','o','u']);
+    const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    const list = document.getElementById('letters');
+    const zone = document.getElementById('dropzone');
+    const keyboardInput = document.getElementById('keyboard-input');
+    let dragState = null;
+    let cursorEdge = null;
+    function cardMarkup(letter) {
+      const v = vowels.has(letter);
+      return `<button type="button" class="card" draggable="true" data-letter="${letter}" aria-label="移除字母 ${letter}"><span class="card-letter ${v ? 'vowel' : 'consonant'}">${letter}</span></button>`;
+    }
+    function emptyMarkup() { return '<div class="empty">點一個字母<br>開始練習吧！</div>'; }
+    function show(letter, beforeCard) {
+      zone.querySelector('.empty')?.remove();
+      if (beforeCard) beforeCard.insertAdjacentHTML('beforebegin', cardMarkup(letter));
+      else zone.insertAdjacentHTML('beforeend', cardMarkup(letter));
+      fitLetters();
+      updateColors();
+      updateCursorTarget();
+    }
+    function replaceAtCursor(letter) {
+      const cards = [...zone.querySelectorAll('.card')];
+      const card = cursorEdge === 'start' ? cards[0] : cards.at(-1);
+      if (!card) return show(letter);
+      card.outerHTML = cardMarkup(letter);
+      fitLetters();
+      updateColors();
+      updateCursorTarget();
+    }
+    function addFromAlphabet(letter) {
+      if (cursorEdge) replaceAtCursor(letter);
+      else show(letter);
+    }
+    function setCursorEdge(edge) {
+      cursorEdge = edge;
+      document.getElementById('cursor-start').classList.toggle('active', edge === 'start');
+      document.getElementById('cursor-end').classList.toggle('active', edge === 'end');
+      updateCursorTarget();
+    }
+    function updateCursorTarget() {
+      const cards = [...zone.querySelectorAll('.card')];
+      cards.forEach(card => card.classList.remove('cursor-target'));
+      if (!cursorEdge || !cards.length) return;
+      (cursorEdge === 'start' ? cards[0] : cards.at(-1)).classList.add('cursor-target');
+    }
+    function updateColors() {
+      const cards = [...zone.querySelectorAll('.card')];
+      cards.forEach((card, index) => {
+        const letter = card.dataset.letter;
+        const followsQ = letter === 'u' && cards[index - 1]?.dataset.letter === 'q';
+        const glyph = card.querySelector('.card-letter');
+        glyph.classList.toggle('vowel', vowels.has(letter) && !followsQ);
+        glyph.classList.toggle('consonant', !vowels.has(letter) || followsQ);
+      });
+    }
+    function fitLetters() {
+      const count = zone.querySelectorAll('.card').length;
+      if (!count) return;
+      let low = 32;
+      let high = 1200;
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        zone.style.setProperty('--letter-size', `${mid}px`);
+        if (zone.scrollWidth <= zone.clientWidth && zone.scrollHeight <= zone.clientHeight) low = mid + 1;
+        else high = mid - 1;
+      }
+      zone.style.setProperty('--letter-size', `${Math.max(32, high)}px`);
+    }
+    function showEmptyIfNeeded() {
+      if (!zone.querySelector('.card')) zone.innerHTML=emptyMarkup();
+    }
+    letters.forEach(letter => {
+      const btn=document.createElement('button');
+      btn.className=`tile ${vowels.has(letter)?'vowel':'consonant'}`;
+      btn.textContent=letter; btn.draggable=true; btn.setAttribute('aria-label', `加入字母 ${letter}`);
+      btn.addEventListener('click',()=>addFromAlphabet(letter));
+      btn.addEventListener('dragstart', event => { dragState = { kind:'alphabet', letter }; event.dataTransfer.setData('text/plain', letter); event.dataTransfer.effectAllowed='copy'; });
+      list.appendChild(btn);
+    });
+    document.getElementById('cursor-start').addEventListener('click', () => setCursorEdge('start'));
+    document.getElementById('cursor-end').addEventListener('click', () => setCursorEdge('end'));
+    document.getElementById('cursor-cancel').addEventListener('click', () => setCursorEdge(null));
+    function addTypedLetters() {
+      [...keyboardInput.value.toLowerCase()].filter(letter => letters.includes(letter)).forEach(letter => show(letter));
+      keyboardInput.value = '';
+    }
+    document.getElementById('add-typed').addEventListener('click', addTypedLetters);
+    keyboardInput.addEventListener('keydown', event => { if (event.key === 'Enter') addTypedLetters(); });
+    function clearDropMarkers() { zone.querySelectorAll('.drop-before, .drop-after').forEach(card => card.classList.remove('drop-before', 'drop-after')); }
+    function insertionInfo(event) {
+      const cards = [...zone.querySelectorAll('.card')];
+      const directTarget = event.target.closest('.card');
+      if (directTarget) return { target: directTarget, position: event.clientX < directTarget.getBoundingClientRect().left + directTarget.getBoundingClientRect().width / 2 ? 'before' : 'after' };
+      const next = cards.find(card => event.clientX < card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2);
+      return next ? { target: next, position: 'before' } : { target: cards.at(-1) || null, position: 'after' };
+    }
+    function insertLetter(letter, target, position) {
+      zone.querySelector('.empty')?.remove();
+      if (!target) zone.insertAdjacentHTML('beforeend', cardMarkup(letter));
+      else target.insertAdjacentHTML(position === 'before' ? 'beforebegin' : 'afterend', cardMarkup(letter));
+      fitLetters(); updateColors(); updateCursorTarget();
+    }
+    zone.addEventListener('click', event => {
+      const card = event.target.closest('.card');
+      if (!card || card.dataset.dragging) return;
+      const cards = [...zone.querySelectorAll('.card')];
+      if (card === cards[0] && cursorEdge !== 'start') return setCursorEdge('start');
+      if (card === cards.at(-1) && cursorEdge !== 'end') return setCursorEdge('end');
+      card.remove(); showEmptyIfNeeded(); fitLetters(); updateColors(); updateCursorTarget();
+    });
+    zone.addEventListener('dragstart', event => { const card = event.target.closest('.card'); if (!card) return; card.dataset.dragging='true'; dragState = { kind:'board', letter:card.dataset.letter }; event.dataTransfer.setData('text/plain', card.dataset.letter); event.dataTransfer.effectAllowed='move'; });
+    zone.addEventListener('dragend', event => { const card = event.target.closest('.card'); if (card) setTimeout(() => delete card.dataset.dragging, 0); setTimeout(() => dragState = null, 0); });
+    zone.addEventListener('dragover', event => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = dragState?.kind === 'board' ? 'move' : 'copy';
+      clearDropMarkers();
+      const { target, position } = insertionInfo(event);
+      if (target) target.classList.add(position === 'before' ? 'drop-before' : 'drop-after');
+    });
+    zone.addEventListener('dragleave', event => { if (!zone.contains(event.relatedTarget)) clearDropMarkers(); });
+    zone.addEventListener('drop', event => {
+      event.preventDefault();
+      const letter = dragState?.letter || event.dataTransfer.getData('text/plain');
+      const source = dragState?.kind;
+      const { target, position } = insertionInfo(event);
+      clearDropMarkers();
+      if (!letters.includes(letter)) return;
+      const dragged = source === 'board' ? document.querySelector(`.card[data-dragging="true"]`) : null;
+      if (dragged === target) return;
+      dragged?.remove();
+      insertLetter(letter, target, position);
+    });
+    document.getElementById('clear').addEventListener('click',()=>{zone.innerHTML=emptyMarkup(); zone.style.removeProperty('--letter-size')});
+    function fitPage() {
+      if (window.innerWidth > 760) { document.body.style.zoom = ''; return; }
+      document.body.style.zoom = '';
+      const app = document.querySelector('.app');
+      const scale = Math.min(1, (window.innerHeight - 4) / app.scrollHeight, window.innerWidth / app.scrollWidth);
+      document.body.style.zoom = String(scale);
+    }
+    window.addEventListener('resize', () => { fitPage(); requestAnimationFrame(fitLetters); });
+    window.addEventListener('load', () => { fitPage(); fitLetters(); });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') document.getElementById('clear').click();});
+  </script>
+</body>
+</html>
