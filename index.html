@@ -24,6 +24,7 @@ h1{margin:0;font-size:clamp(29px,4vw,43px);line-height:1.15;color:#5b4039}
 .card:hover{transform:translateY(-3px);box-shadow:0 8px 16px #73584f1d}
 .cover-wrap{height:145px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px}
 .cover{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.phonics-cover{background:linear-gradient(135deg,#fff3f5,#eee8ff);font:900 45px/1 "Arial Rounded MT Bold",Arial,sans-serif;letter-spacing:2px}.phonics-cover .vowel{color:#ee4848}.phonics-cover .consonant{color:#151515}
 .card-content{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:7px 3px 2px;min-height:62px}
 .card strong{font-size:13px;line-height:1.25;color:#5b4039}
 .card p{display:none}
@@ -56,6 +57,11 @@ footer{text-align:center;margin-top:10px;color:#a58a81;font-size:13px}
 <h2>🌟 單字練習網站</h2>
 <p class="hint">選一本課本開始練習</p>
 <div class="grid">
+
+<a class="card" href="phonics-whiteboard.html">
+  <div class="cover-wrap phonics-cover" aria-label="Phonics 字母卡"><span class="vowel">a</span><span class="consonant">b</span><span class="consonant">c</span></div>
+  <div class="card-content"><strong>Nancy的Phonics 小白板</strong><p>字母拼讀與拼字練習</p><span class="go">開始練習 →</span></div>
+</a>
 
 <a class="card" href="300_words_complete.html">
   <div class="cover-wrap"><img class="cover" src="300.jfif?v=20260808-2" alt="國小必備300單字封面"></div>
