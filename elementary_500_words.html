@@ -1,4 +1,182 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>國小必學500英語單字｜Nancy 老師</title><style>
-:root{--ink:#614b43;--purple:#745bc4;--pink:#ffe0e9;--yellow:#fff0b8}*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:"Microsoft JhengHei",system-ui,sans-serif;background:radial-gradient(circle at 5% 9%,#ffdbe5 0 72px,transparent 74px),radial-gradient(circle at 95% 12%,#e4dcfa 0 90px,transparent 92px),#fffaf2}.app{width:min(1000px,calc(100% - 26px));margin:auto;padding:13px 0 30px}.top{display:grid;grid-template-columns:1fr 130px;align-items:center;gap:20px;padding:17px 24px;border:3px solid #fff;border-radius:27px;background:linear-gradient(135deg,#fff,#fff0ec);box-shadow:0 11px 28px #6d554c1c}.tag{display:inline-block;padding:3px 11px;border-radius:999px;background:#e8defd;font-size:11px;font-weight:900}.top h1{margin:5px 0 2px;font-size:clamp(27px,4vw,41px)}.top p{margin:3px 0;color:#947970}.cover{width:110px;height:138px;object-fit:cover;border:4px solid #fff;border-radius:14px;box-shadow:0 8px 18px #765b5230}.pages{display:flex;gap:8px;margin:13px 0}.page{padding:10px 18px;border:2px solid var(--purple);border-radius:13px;background:var(--purple);color:#fff;font-weight:900}.launch{width:100%;margin-bottom:11px;padding:11px;border:0;border-radius:14px;background:var(--purple);color:#fff;font:inherit;font-weight:900;cursor:pointer}.panel,.quiz{padding:19px;border:3px solid #fff;border-radius:27px;background:#ffffffdf;box-shadow:0 11px 28px #6d554c1c}.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.head h2{margin:0}.badge{padding:6px 11px;border-radius:999px;background:var(--yellow);font-weight:900}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{position:relative;min-height:102px;padding:15px 38px 13px 15px;border:2px solid #f0dce2;border-radius:18px;background:#fff4f6;text-align:left;color:var(--ink);cursor:pointer}.card:nth-child(3n+2){background:#f5f1ff;border-color:#e1d8f3}.card:nth-child(3n){background:#f0faf5;border-color:#d6ecdf}.en{display:block;font-size:21px;font-weight:950}.zh{display:block;margin-top:7px;color:#92766d}.sound{position:absolute;right:11px;top:11px}.quiz{display:none;margin-top:12px;text-align:center}.quiz.open{display:block}.clue{margin:18px 0 5px;font-size:clamp(30px,5vw,45px);font-weight:950}.answer{min-height:65px;margin:14px 0;padding:10px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;border:3px dashed #d7c8ed;border-radius:18px;background:#faf7ff}.answer.empty:after{content:'點選下方字母開始拼字';color:#ab9db5;font-weight:700}.letters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0}.letter,.chosen{width:48px;height:52px;border:2px solid var(--purple);border-radius:13px;background:#fff;color:#61449f;font-size:24px;font-weight:950;cursor:pointer;box-shadow:0 4px 0 #d6caeb}.letter:disabled{opacity:.18}.chosen{background:#f3edff}.feedback{min-height:30px;margin:8px;font-size:18px;font-weight:900}.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.action{padding:10px 16px;border:0;border-radius:13px;background:#eee8f7;color:#604b76;font:inherit;font-weight:900;cursor:pointer}.primary{background:var(--purple);color:#fff}.listen{background:#dff2ff;color:#33789b}.home{display:inline-block;margin-top:13px;color:#7359ac;font-weight:900;text-decoration:none}@media(max-width:620px){.top{grid-template-columns:1fr 85px;padding:15px}.cover{width:78px;height:100px}.cards{grid-template-columns:repeat(2,1fr)}.panel,.quiz{padding:14px}}@media(max-width:380px){.cards{grid-template-columns:1fr}}</style></head><body><main class="app">
-<header class="top"><div><span class="tag">NANCY'S VOCABULARY GARDEN</span><h1>國小必學500英語單字</h1><p>目前收錄第 1 頁，以後可以逐頁增加 ♡</p></div><img class="cover" src="elementary_500_cover.jpg" alt="國小必學500英語單字練習簿封面"></header><div class="pages"><span class="page">第 1 頁</span></div><button class="launch" id="startQuiz">🧩 開始第 1 頁重組單字練習</button><section class="panel"><div class="head"><h2>第 1 頁單字</h2><span class="badge">9 個單字</span></div><div class="cards" id="cards"></div></section><section class="quiz" id="quiz"><div class="head"><h2>🧩 重組單字練習</h2><span class="badge" id="progress"></span></div><div class="clue" id="clue"></div><button class="action listen" id="hear">🔊 聽發音</button><div class="answer empty" id="answer"></div><div class="letters" id="letters"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="action" id="undo">↩ 撤回</button><button class="action" id="mix">🔀 重新排列</button><button class="action primary" id="check">✓ 檢查答案</button><button class="action" id="next">跳過／下一題 →</button><button class="action" id="close">關閉練習</button></div></section><a class="home" href="index.html">🏠 回到單字練習首頁</a></main><script>
-const words=[['a','一個（冠詞）'],['an','一個（冠詞）'],['the','這；那（定冠詞）'],['I am','我是'],['you are','你／你們是'],['he is','他是'],['she is','她是'],['it is','它／牠是'],['we are','我們是']];let quizWords=[],q=0,tiles=[],chosen=[];const cards=document.querySelector('#cards'),quiz=document.querySelector('#quiz'),clue=document.querySelector('#clue'),answer=document.querySelector('#answer'),letters=document.querySelector('#letters'),feedback=document.querySelector('#feedback'),progress=document.querySelector('#progress');function speak(w){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(w);u.lang='en-US';u.rate=.78;u.pitch=1.15;speechSynthesis.speak(u)}function shuffle(a){for(let i=a.length-1;i;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}const norm=s=>s.toLowerCase().replace(/[^a-z]/g,'');words.forEach(w=>{const b=document.createElement('button');b.className='card';b.innerHTML=`<span class="sound">🔊</span><span class="en">${w[0]}</span><span class="zh">${w[1]}</span>`;b.onclick=()=>speak(w[0]);cards.appendChild(b)});function setup(){const w=quizWords[q];chosen=[];tiles=shuffle([...norm(w[0])].map((char,id)=>({char,id,used:false})));clue.textContent=w[1];progress.textContent=`第 ${q+1} 題／共 ${quizWords.length} 題`;feedback.textContent='';draw();speak(w[0])}function draw(){answer.innerHTML='';answer.classList.toggle('empty',!chosen.length);chosen.forEach(t=>{const b=document.createElement('button');b.className='chosen';b.textContent=t.char;b.onclick=()=>remove(t);answer.appendChild(b)});letters.innerHTML='';tiles.forEach(t=>{const b=document.createElement('button');b.className='letter';b.textContent=t.char;b.disabled=t.used;b.onclick=()=>{t.used=true;chosen.push(t);feedback.textContent='';draw()};letters.appendChild(b)})}function remove(t){t.used=false;chosen=chosen.filter(x=>x!==t);feedback.textContent='';draw()}function next(){q=(q+1)%quizWords.length;setup()}document.querySelector('#startQuiz').onclick=()=>{quizWords=shuffle([...words]);q=0;quiz.classList.add('open');setup();quiz.scrollIntoView({behavior:'smooth'})};document.querySelector('#hear').onclick=()=>speak(quizWords[q][0]);document.querySelector('#undo').onclick=()=>chosen.length&&remove(chosen[chosen.length-1]);document.querySelector('#mix').onclick=()=>{chosen.forEach(t=>t.used=false);chosen=[];shuffle(tiles);feedback.textContent='';draw()};document.querySelector('#check').onclick=()=>{const right=norm(quizWords[q][0]),got=chosen.map(t=>t.char).join('');if(got===right){feedback.textContent=`🎉 答對了！${quizWords[q][0]}`;feedback.style.color='#39835c';speak(quizWords[q][0])}else{feedback.textContent=got.length<right.length?'還有字母沒選完喔！':'再試一次，你快答對了！';feedback.style.color='#c45d75'}};document.querySelector('#next').onclick=next;document.querySelector('#close').onclick=()=>{quiz.classList.remove('open');speechSynthesis.cancel()};</script></body></html>
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>國小必備 500 單字｜Nancy 老師</title>
+<style>
+:root{--ink:#5d5147;--gold:#d5a93d;--cream:#fffdf5;--yellow:#fff2b8;--purple:#735bc4}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Microsoft JhengHei",system-ui,sans-serif;color:var(--ink);background:#fffaf1}.app{width:min(1080px,calc(100% - 24px));margin:auto;padding:12px 0 28px}.hero,.panel,.quiz{border:3px solid #fff;border-radius:26px;background:#ffffffed;box-shadow:0 11px 28px #6d554c1b}.hero{display:grid;grid-template-columns:1fr auto;align-items:center;padding:18px 25px;background:linear-gradient(135deg,#fff,#fff7ce)}.tag{display:inline-block;padding:4px 11px;border-radius:999px;background:#fff0ad;font-size:11px;font-weight:900}h1{margin:5px 0 2px;font-size:clamp(29px,4vw,43px)}.hero p{margin:3px 0;color:#918075}.mascot{font-size:65px}.pager{display:flex;align-items:center;gap:9px;margin:12px 0 8px}.pagebtn{width:42px;height:42px;border:0;border-radius:12px;background:var(--purple);color:#fff;font-size:20px;font-weight:900;cursor:pointer}select{flex:1;padding:10px 12px;border:2px solid #e9dfc7;border-radius:13px;background:#fff;font:inherit;font-weight:900;color:#63584f}.tool{width:100%;padding:11px;border:0;border-radius:14px;font:inherit;font-weight:900;cursor:pointer;background:var(--purple);color:#fff;margin-bottom:11px}.panel,.quiz{padding:18px}.head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.head h2{margin:0;font-size:22px}.badge{padding:6px 11px;border-radius:999px;background:var(--yellow);font-weight:900}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{position:relative;min-height:105px;padding:14px;border:2px solid #f1e5c8;border-radius:17px;background:#fffaf0;text-align:center;cursor:pointer}.card:nth-child(3n+2){background:#f5f1ff;border-color:#e2daf3}.card:nth-child(3n){background:#fff0f3;border-color:#f2dadd}.en{display:block;font-size:20px;font-weight:950}.zh{display:block;margin-top:7px;color:#90776e;font-size:16px}.sound{position:absolute;right:10px;top:8px;opacity:.5}.quiz{display:none;margin-top:12px;text-align:center}.quiz.open{display:block}.clue{margin:15px 0 5px;font-size:clamp(32px,6vw,48px);font-weight:950}.answer{min-height:70px;margin:14px 0;padding:10px;border:3px dashed #d7caed;border-radius:18px;background:#faf7ff;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px}.answer.empty:after{content:"點選下方字母開始拼字";color:#aaa0b4;font-weight:700}.letters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0}.letter,.chosen{min-width:47px;height:50px;padding:0 10px;border:2px solid var(--purple);border-radius:12px;background:#fff;color:#60449d;font-size:22px;font-weight:950;cursor:pointer;box-shadow:0 4px 0 #d6caeb}.letter:disabled{opacity:.2}.chosen{background:#f2edff}.feedback{min-height:28px;margin:8px;font-size:18px;font-weight:900}.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.action{padding:10px 14px;border:0;border-radius:12px;background:#eee8f7;color:#5f4b75;font:inherit;font-weight:900;cursor:pointer}.primary{background:var(--purple);color:#fff}.listen{background:#e1f4ff;color:#337a9d}.home{display:inline-block;margin-top:13px;color:#7257a8;font-weight:900;text-decoration:none}@media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:480px){.mascot{display:none}.hero{padding:16px}.panel,.quiz{padding:13px}.cards{grid-template-columns:1fr}}
+</style></head><body><main class="app"><header class="hero"><div><span class="tag">NANCY'S VOCABULARY GARDEN</span><h1>國小必備 500 單字</h1><p>第 1～56 頁｜共 504 個單字・片語</p></div><div class="mascot">📒</div></header>
+<div class="pager"><button class="pagebtn" id="prev">‹</button><select id="pageSelect">
+<option value="1" selected>第 1 頁</option>
+<option value="2">第 2 頁</option>
+<option value="3">第 3 頁</option>
+<option value="4">第 4 頁</option>
+<option value="5">第 5 頁</option>
+<option value="6">第 6 頁</option>
+<option value="7">第 7 頁</option>
+<option value="8">第 8 頁</option>
+<option value="9">第 9 頁</option>
+<option value="10">第 10 頁</option>
+<option value="11">第 11 頁</option>
+<option value="12">第 12 頁</option>
+<option value="13">第 13 頁</option>
+<option value="14">第 14 頁</option>
+<option value="15">第 15 頁</option>
+<option value="16">第 16 頁</option>
+<option value="17">第 17 頁</option>
+<option value="18">第 18 頁</option>
+<option value="19">第 19 頁</option>
+<option value="20">第 20 頁</option>
+<option value="21">第 21 頁</option>
+<option value="22">第 22 頁</option>
+<option value="23">第 23 頁</option>
+<option value="24">第 24 頁</option>
+<option value="25">第 25 頁</option>
+<option value="26">第 26 頁</option>
+<option value="27">第 27 頁</option>
+<option value="28">第 28 頁</option>
+<option value="29">第 29 頁</option>
+<option value="30">第 30 頁</option>
+<option value="31">第 31 頁</option>
+<option value="32">第 32 頁</option>
+<option value="33">第 33 頁</option>
+<option value="34">第 34 頁</option>
+<option value="35">第 35 頁</option>
+<option value="36">第 36 頁</option>
+<option value="37">第 37 頁</option>
+<option value="38">第 38 頁</option>
+<option value="39">第 39 頁</option>
+<option value="40">第 40 頁</option>
+<option value="41">第 41 頁</option>
+<option value="42">第 42 頁</option>
+<option value="43">第 43 頁</option>
+<option value="44">第 44 頁</option>
+<option value="45">第 45 頁</option>
+<option value="46">第 46 頁</option>
+<option value="47">第 47 頁</option>
+<option value="48">第 48 頁</option>
+<option value="49">第 49 頁</option>
+<option value="50">第 50 頁</option>
+<option value="51">第 51 頁</option>
+<option value="52">第 52 頁</option>
+<option value="53">第 53 頁</option>
+<option value="54">第 54 頁</option>
+<option value="55">第 55 頁</option>
+<option value="56">第 56 頁</option>
+</select><button class="pagebtn" id="nextPage">›</button></div><button class="tool" id="quizBtn">🧩 開始本頁重組單字練習</button>
+<section class="panel"><div class="head"><h2 id="title">第 1 頁</h2><span class="badge">每頁 9 個</span></div><div class="cards" id="cards">
+<button class="card" type="button" data-word="a"><span class="sound">🔊</span><span class="en">a</span><span class="zh">一個</span></button>
+<button class="card" type="button" data-word="an"><span class="sound">🔊</span><span class="en">an</span><span class="zh">一個</span></button>
+<button class="card" type="button" data-word="the"><span class="sound">🔊</span><span class="en">the</span><span class="zh">這個／那個／該；定冠詞</span></button>
+<button class="card" type="button" data-word="I am"><span class="sound">🔊</span><span class="en">I am</span><span class="zh">我是</span></button>
+<button class="card" type="button" data-word="you are"><span class="sound">🔊</span><span class="en">you are</span><span class="zh">你(們)是</span></button>
+<button class="card" type="button" data-word="he is"><span class="sound">🔊</span><span class="en">he is</span><span class="zh">他是</span></button>
+<button class="card" type="button" data-word="she is"><span class="sound">🔊</span><span class="en">she is</span><span class="zh">她是</span></button>
+<button class="card" type="button" data-word="it is"><span class="sound">🔊</span><span class="en">it is</span><span class="zh">牠、它是</span></button>
+<button class="card" type="button" data-word="we are"><span class="sound">🔊</span><span class="en">we are</span><span class="zh">我們是</span></button>
+</div></section>
+<section class="quiz" id="quiz"><div class="head"><h2>🧩 重組單字練習</h2><span class="badge" id="progress"></span></div><div class="clue" id="clue"></div><button class="action listen" id="hear">🔊 聽發音</button><div class="answer empty" id="answer"></div><div class="letters" id="letters"></div><div class="feedback" id="feedback"></div><div class="actions"><button class="action" id="undo">↩ 撤回</button><button class="action" id="remix">🔀 重新排列</button><button class="action primary" id="check">✓ 檢查答案</button><button class="action" id="nextQ">下一題 →</button><button class="action" id="close">關閉練習</button></div></section><a class="home" href="index.html">🏠 回到單字練習首頁</a></main>
+<script>
+var pages={"1": [["a", "一個"], ["an", "一個"], ["the", "這個／那個／該；定冠詞"], ["I am", "我是"], ["you are", "你(們)是"], ["he is", "他是"], ["she is", "她是"], ["it is", "牠、它是"], ["we are", "我們是"]], "2": [["they are", "他們是"], ["me", "我"], ["him", "他"], ["us", "我們"], ["them", "他們"], ["my", "我的"], ["your", "你的、你們的"], ["her", "她的"], ["his", "他的"]], "3": [["its", "它的、牠的"], ["our", "我們的"], ["their", "他們的"], ["this", "這個"], ["that", "那個"], ["can", "可以"], ["all", "全部的"], ["both", "兩者都"], ["last", "最後的"]], "4": [["many", "許多"], ["some", "一些"], ["every", "每一個"], ["how", "如何……"], ["what", "什麼……"], ["when", "何時……"], ["where", "在哪裡……"], ["which", "哪一個……"], ["who", "誰……"]], "5": [["whose", "誰的……"], ["why", "為什麼……"], ["and", "和"], ["but", "但是"], ["because", "因為"], ["do", "做"], ["go", "去、走"], ["find", "找"], ["help", "幫助"]], "6": [["jump", "跳"], ["laugh", "笑"], ["like", "喜歡"], ["pull", "拉"], ["push", "推"], ["see", "看見"], ["take", "攜帶、拿取"], ["walk", "走路"], ["number", "數字"]], "7": [["zero", "零"], ["one", "一"], ["two", "二"], ["three", "三"], ["four", "四"], ["five", "五"], ["six", "六"], ["seven", "七"], ["eight", "八"]], "8": [["nine", "九"], ["ten", "十"], ["eleven", "十一"], ["twelve", "十二"], ["thirteen", "十三"], ["fourteen", "十四"], ["fifteen", "十五"], ["sixteen", "十六"], ["seventeen", "十七"]], "9": [["eighteen", "十八"], ["nineteen", "十九"], ["twenty", "二十"], ["thirty", "三十"], ["forty", "四十"], ["fifty", "五十"], ["sixty", "六十"], ["seventy", "七十"], ["eighty", "八十"]], "10": [["ninety", "九十"], ["hundred", "一百"], ["first", "第一"], ["second", "第二"], ["third", "第三"], ["face", "臉"], ["head", "頭"], ["eye", "眼睛"], ["nose", "鼻子"]], "11": [["mouth", "嘴巴"], ["ear", "耳朵"], ["tooth", "牙齒"], ["hair", "頭髮"], ["hand", "手"], ["arm", "手臂"], ["leg", "腿"], ["foot", "腳"], ["back", "背"]], "12": [["person", "人"], ["man", "男人"], ["woman", "女人"], ["boy", "男孩"], ["girl", "女孩"], ["kid", "小孩"], ["baby", "嬰兒"], ["sky", "天空"], ["sun", "太陽"]], "13": [["moon", "月亮"], ["cloud", "雲"], ["rain", "雨"], ["snow", "雪"], ["star", "星星"], ["rainbow", "彩虹"], ["typhoon", "颱風"], ["wind", "風"], ["weather", "天氣"]], "14": [["money", "錢"], ["buy", "買"], ["dollar", "美元；元"], ["free", "免費的"], ["color", "顏色"], ["black", "黑色的"], ["white", "白色的"], ["red", "紅色的"], ["orange", "橘色的"]], "15": [["yellow", "黃色的"], ["green", "綠色的"], ["blue", "藍色的"], ["purple", "紫色的"], ["pink", "粉紅色的"], ["brown", "咖啡色的"], ["gray", "灰色的"], ["morning", "早上"], ["noon", "中午"]], "16": [["afternoon", "下午"], ["evening", "傍晚"], ["night", "晚上"], ["week", "星期"], ["Monday", "星期一"], ["Tuesday", "星期二"], ["Wednesday", "星期三"], ["Thursday", "星期四"], ["Friday", "星期五"]], "17": [["Saturday", "星期六"], ["Sunday", "星期日"], ["month", "月"], ["January", "一月"], ["February", "二月"], ["March", "三月"], ["April", "四月"], ["May", "五月"], ["June", "六月"]], "18": [["July", "七月"], ["August", "八月"], ["September", "九月"], ["October", "十月"], ["November", "十一月"], ["December", "十二月"], ["season", "季節"], ["spring", "春天"], ["summer", "夏天"]], "19": [["fall", "秋天"], ["winter", "冬天"], ["day", "天"], ["year", "年"], ["today", "今天"], ["tomorrow", "明天"], ["yesterday", "昨天"], ["clock", "時鐘"], ["watch", "手錶"]], "20": [["time", "時間"], ["early", "早的；提早"], ["late", "晚的；遲到的"], ["now", "現在"], ["animal", "動物"], ["pet", "寵物"], ["bear", "熊"], ["cat", "貓"], ["chicken", "雞"]], "21": [["cow", "乳牛"], ["dog", "狗"], ["elephant", "大象"], ["horse", "馬"], ["koala", "無尾熊"], ["lion", "獅子"], ["monkey", "猴子"], ["mouse", "老鼠"], ["panda", "大貓熊"]], "22": [["pig", "豬"], ["rabbit", "兔子"], ["sheep", "綿羊"], ["snake", "蛇"], ["spider", "蜘蛛"], ["tiger", "老虎"], ["zebra", "斑馬"], ["fish", "魚"], ["frog", "青蛙"]], "23": [["turtle", "海龜"], ["whale", "鯨魚"], ["bird", "鳥"], ["duck", "鴨子"], ["bee", "蜜蜂"], ["butterfly", "蝴蝶"], ["bite", "咬"], ["clothes", "衣服"], ["coat", "外套"]], "24": [["dress", "洋裝"], ["pants", "長褲"], ["shorts", "短褲"], ["pocket", "口袋"], ["shirt", "襯衫"], ["skirt", "裙子"], ["sweater", "毛衣"], ["bag", "袋子"], ["cap", "棒球帽"]], "25": [["hat", "帽子"], ["shoes", "鞋子"], ["socks", "襪子"], ["glasses", "眼鏡"], ["wear", "穿、戴"], ["family", "家庭、家人"], ["father", "爸爸"], ["mother", "媽媽"], ["parent", "父親或母親；家長"]], "26": [["brother", "哥哥、弟弟"], ["sister", "姐姐、妹妹"], ["son", "兒子"], ["daughter", "女兒"], ["grandfather", "外公、爺爺"], ["grandmother", "外婆、奶奶"], ["uncle", "叔叔、舅舅"], ["aunt", "阿姨、姑姑"], ["cousin", "堂／表兄弟姊妹"]], "27": [["grow", "成長、長大"], ["live", "住"], ["fruit", "水果"], ["apple", "蘋果"], ["banana", "香蕉"], ["grape", "葡萄"], ["lemon", "檸檬"], ["orange", "柳橙"], ["peach", "桃子"]], "28": [["food", "食物"], ["beef", "牛肉"], ["chicken", "雞肉"], ["duck", "鴨肉"], ["fish", "魚肉"], ["pork", "豬肉"], ["noodles", "麵"], ["egg", "蛋"], ["rice", "米飯"]], "29": [["salad", "沙拉"], ["soup", "湯"], ["cake", "蛋糕"], ["candy", "糖果"], ["chocolate", "巧克力"], ["cookies", "餅乾"], ["bread", "麵包"], ["ice cream", "冰淇淋"], ["pie", "派"]], "30": [["pizza", "披薩"], ["sandwich", "三明治"], ["coffee", "咖啡"], ["coke", "可樂"], ["juice", "果汁"], ["milk", "牛奶"], ["tea", "茶"], ["water", "水"], ["breakfast", "早餐"]], "31": [["lunch", "午餐"], ["dinner", "晚餐"], ["cook", "做飯"], ["drink", "喝"], ["eat", "吃"], ["taste", "嚐起來"], ["Miss", "小姐"], ["Mr.", "先生"], ["Mrs.", "太太"]], "32": [["name", "名字"], ["beach", "海灘"], ["lake", "湖"], ["mountain", "山"], ["river", "河流"], ["sea", "大海"], ["house", "房子"], ["home", "家；家裡"], ["garden", "院子、花園"]], "33": [["street", "街道"], ["living room", "客廳"], ["door", "門"], ["fan", "電扇"], ["floor", "地板"], ["sofa", "沙發"], ["telephone", "電話"], ["television", "電視"], ["wall", "牆壁"]], "34": [["window", "窗戶"], ["dining room", "飯廳；餐廳"], ["table", "桌子"], ["kitchen", "廚房"], ["refrigerator", "電冰箱"], ["bedroom", "臥房"], ["bed", "床"], ["chair", "椅子"], ["desk", "書桌"]], "35": [["computer", "電腦"], ["lamp", "燈"], ["key", "鑰匙"], ["shelf", "架子"], ["bathroom", "浴室"], ["shower", "淋浴"], ["towel", "毛巾"], ["sweep", "掃"], ["wash", "洗"]], "36": [["work", "工作"], ["job", "工作、職業"], ["cook", "廚師"], ["doctor", "醫生"], ["driver", "司機、駕駛員"], ["farmer", "農夫"], ["nurse", "護士"], ["police officer", "警察"], ["singer", "歌手"]], "37": [["soldier", "軍人"], ["happy", "開心的"], ["angry", "生氣的"], ["good", "好的"], ["bad", "壞的"], ["tall", "高的"], ["short", "矮的"], ["fat", "胖的"], ["thin", "瘦的"]], "38": [["busy", "忙碌的"], ["cute", "可愛的"], ["old", "老的"], ["young", "年輕的"], ["smart", "聰明的"], ["sad", "傷心的"], ["pretty", "漂亮的"], ["bank", "銀行"], ["bookstore", "書店"]], "39": [["library", "圖書館"], ["market", "市場"], ["office", "辦公室"], ["park", "公園"], ["restaurant", "餐廳"], ["restroom", "洗手間、廁所"], ["store", "商店"], ["supermarket", "超級市場"], ["zoo", "動物園"]], "40": [["fire station", "消防站"], ["hospital", "醫院"], ["police station", "警察局"], ["post office", "郵局"], ["right", "右邊"], ["left", "左邊"], ["back", "向後、回原處"], ["here", "這裡"], ["there", "那裡"]], "41": [["school", "學校"], ["teacher", "老師"], ["student", "學生"], ["classmate", "同學"], ["test", "考試"], ["blackboard", "黑板"], ["book", "書、書本"], ["classroom", "教室"], ["Chinese", "中文"]], "42": [["English", "英文"], ["art", "美術、藝術"], ["math", "數學"], ["physical education", "體育"], ["music", "音樂"], ["science", "科學"], ["eraser", "橡皮擦"], ["friend", "朋友"], ["glue", "膠水"]], "43": [["homework", "回家作業"], ["paper", "紙張"], ["pencil", "鉛筆"], ["ruler", "尺"], ["picture", "圖片、照片"], ["question", "問題"], ["story", "故事"], ["ask", "問"], ["answer", "回答"]], "44": [["draw", "畫"], ["listen", "聽"], ["read", "閱讀"], ["say", "說"], ["spell", "拼寫"], ["study", "學習"], ["write", "寫"], ["big", "大的"], ["small", "小的"]], "45": [["long", "長的"], ["short", "短的"], ["heavy", "重的"], ["light", "輕的"], ["high", "高的"], ["low", "低的"], ["sport", "運動"], ["ball", "球"], ["baseball", "棒球"]], "46": [["basketball", "籃球"], ["soccer", "足球"], ["doll", "玩偶"], ["drum", "鼓"], ["game", "遊戲、比賽"], ["kite", "風箏"], ["movie", "電影"], ["piano", "鋼琴"], ["song", "歌曲"]], "47": [["toy", "玩具"], ["trip", "旅行"], ["climb", "爬、攀爬"], ["dance", "跳舞"], ["fish", "釣魚"], ["kick", "踢"], ["play", "玩"], ["run", "跑、跑步"], ["sing", "唱歌"]], "48": [["swim", "游泳"], ["win", "贏"], ["chopsticks", "筷子"], ["spoon", "湯匙"], ["knife", "刀子"], ["fork", "叉子"], ["cup", "杯子"], ["dish", "碟子、盤子"], ["glass", "玻璃杯"]], "49": [["airplane", "飛機"], ["bicycle", "腳踏車"], ["boat", "小船"], ["ship", "船"], ["bus", "公車"], ["car", "車子"], ["motorcycle", "摩托車"], ["MRT", "捷運"], ["taxi", "計程車"]], "50": [["train", "火車"], ["truck", "卡車"], ["fast", "快的"], ["slow", "慢的"], ["drive", "開車"], ["fly", "飛、飛行"], ["ride", "騎；搭乘"], ["turn", "轉彎"], ["goodbye", "再見"]], "51": [["hello", "哈囉"], ["please", "請"], ["at", "在……"], ["in", "在……裡面"], ["out", "向外"], ["by", "在……旁邊"], ["outside", "在……外面"], ["inside", "在……裡面"], ["next to", "在……旁邊"]], "52": [["on", "在……上面"], ["over", "在……上方"], ["under", "在……下方"], ["near", "靠近、接近"], ["before", "在……之前"], ["after", "在……之後"], ["in front of", "在……前面"], ["behind", "在……後面"], ["same", "一樣的"]], "53": [["different", "不一樣的"], ["easy", "簡單的"], ["hard", "困難的"], ["fine", "好的；沒事的"], ["fun", "有趣的"], ["great", "很棒的"], ["hot", "熱的；燙的"], ["new", "新的"], ["OK", "好的"]], "54": [["only", "唯一的；只有"], ["noisy", "吵鬧的"], ["quiet", "安靜的"], ["ready", "準備好的"], ["right", "對的"], ["wrong", "錯的"], ["sorry", "對不起"], ["sure", "確定的"], ["dry", "乾的"]], "55": [["wet", "溼的"], ["sweet", "甜的"], ["again", "再一次"], ["always", "總是、永遠"], ["maybe", "也許"], ["never", "不曾"], ["no", "不"], ["not", "不、沒有"], ["only", "僅僅"]], "56": [["really", "真正地"], ["so", "所以"], ["still", "仍然"], ["sure", "當然"], ["then", "然後、接著"], ["together", "一起"], ["too", "也、太"], ["very", "非常"], ["yes", "是"]]};
+var current=1,quizWords=[],q=0,tiles=[],chosen=[];
+var select=document.getElementById("pageSelect");
+var cards=document.getElementById("cards");
+var title=document.getElementById("title");
+var quiz=document.getElementById("quiz");
+var clue=document.getElementById("clue");
+var answer=document.getElementById("answer");
+var letters=document.getElementById("letters");
+var feedback=document.getElementById("feedback");
+var progress=document.getElementById("progress");
+
+function speak(t){
+  try{
+    if(!window.speechSynthesis || !window.SpeechSynthesisUtterance) return;
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(t);
+    u.lang="en-US"; u.rate=0.8;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function shuffle(a){
+  for(var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1)),tmp=a[i];a[i]=a[j];a[j]=tmp;
+  }
+  return a;
+}
+function norm(s){return String(s).toLowerCase().replace(/[^a-z]/g,"");}
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function bindCards(){
+  var cs=cards.getElementsByClassName("card");
+  for(var i=0;i<cs.length;i++){
+    cs[i].onclick=function(){speak(this.getAttribute("data-word"));};
+  }
+}
+function showPage(p){
+  p=parseInt(p,10);
+  if(isNaN(p)) p=1;
+  if(p<1)p=1;if(p>56)p=56;
+  current=p; select.value=String(current); title.innerHTML="第 "+current+" 頁";
+  var list=pages[String(current)] || pages[current] || [];
+  var h="";
+  for(var i=0;i<list.length;i++){
+    h+='<button class="card" type="button" data-word="'+esc(list[i][0])+'"><span class="sound">🔊</span><span class="en">'+esc(list[i][0])+'</span><span class="zh">'+esc(list[i][1])+'</span></button>';
+  }
+  cards.innerHTML=h;
+  bindCards();
+}
+select.onchange=function(){showPage(this.value);};
+document.getElementById("prev").onclick=function(){showPage(current-1);};
+document.getElementById("nextPage").onclick=function(){showPage(current+1);};
+
+function setup(){
+  var w=quizWords[q],word=norm(w[0]),arr=[],i;
+  chosen=[]; tiles=[];
+  for(i=0;i<word.length;i++) arr.push({char:word.charAt(i),id:i,used:false});
+  tiles=shuffle(arr);
+  clue.innerHTML=esc(w[1]);
+  progress.innerHTML="第 "+(q+1)+" 題 / 共 "+quizWords.length+" 題";
+  feedback.innerHTML="";
+  draw(); speak(w[0]);
+}
+function draw(){
+  var i,b;
+  answer.innerHTML="";
+  if(chosen.length===0) answer.className="answer empty"; else answer.className="answer";
+  for(i=0;i<chosen.length;i++){
+    b=document.createElement("button");b.className="chosen";b.innerHTML=chosen[i].char;
+    (function(t){b.onclick=function(){removeTile(t);};})(chosen[i]);
+    answer.appendChild(b);
+  }
+  letters.innerHTML="";
+  for(i=0;i<tiles.length;i++){
+    b=document.createElement("button");b.className="letter";b.innerHTML=tiles[i].char;b.disabled=tiles[i].used;
+    (function(t){b.onclick=function(){t.used=true;chosen.push(t);feedback.innerHTML="";draw();};})(tiles[i]);
+    letters.appendChild(b);
+  }
+}
+function removeTile(t){
+  t.used=false;
+  var n=[];for(var i=0;i<chosen.length;i++)if(chosen[i]!==t)n.push(chosen[i]);
+  chosen=n;feedback.innerHTML="";draw();
+}
+function nextQuestion(){q=(q+1)%quizWords.length;setup();}
+document.getElementById("quizBtn").onclick=function(){
+  var src=pages[String(current)] || pages[current] || [];
+  quizWords=shuffle(src.slice(0));q=0;quiz.className="quiz open";setup();
+  try{quiz.scrollIntoView({behavior:"smooth"});}catch(e){quiz.scrollIntoView();}
+};
+document.getElementById("hear").onclick=function(){speak(quizWords[q][0]);};
+document.getElementById("undo").onclick=function(){if(chosen.length)removeTile(chosen[chosen.length-1]);};
+document.getElementById("remix").onclick=function(){
+  for(var i=0;i<chosen.length;i++)chosen[i].used=false;
+  chosen=[];shuffle(tiles);feedback.innerHTML="";draw();
+};
+document.getElementById("check").onclick=function(){
+  var right=norm(quizWords[q][0]),got="",i;
+  for(i=0;i<chosen.length;i++)got+=chosen[i].char;
+  if(got===right){feedback.innerHTML="🎉 答對了！"+esc(quizWords[q][0]);feedback.style.color="#37815c";speak(quizWords[q][0]);}
+  else{feedback.innerHTML=got.length<right.length?"還有字母沒選完喔！":"再試一次，你快答對了！";feedback.style.color="#c45d75";}
+};
+document.getElementById("nextQ").onclick=nextQuestion;
+document.getElementById("close").onclick=function(){quiz.className="quiz";try{window.speechSynthesis.cancel();}catch(e){}};
+bindCards();
+</script></body></html>
