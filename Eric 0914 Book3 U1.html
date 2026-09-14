@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>國二上 Unit 1 英語寶可夢大冒險 (大字免捲動版)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800&family=Noto+Sans+TC:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Fredoka"', '"Noto Sans TC"', 'sans-serif'],
+          },
+          colors: {
+            poke: {
+              red: '#EE1515',
+              darkRed: '#BD0F0F',
+              yellow: '#FFCB05',
+              gold: '#C7A008',
+              blue: '#2A75BB',
+              darkBlue: '#1D4F7C',
+              cream: '#FEF9EF',
+              mint: '#48D0B0',
+              softMint: '#E6FAF5',
+            }
+          },
+          boxShadow: {
+            'pixel-btn': '0 5px 0px #B48B00, 0 8px 15px rgba(0,0,0,0.1)',
+            'pixel-btn-active': '0 2px 0px #B48B00, 0 3px 6px rgba(0,0,0,0.1)',
+            'poke-card': '0 12px 28px -4px rgba(42, 117, 187, 0.18), 0 6px 14px -2px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Strict Zero-Scroll Lock for Whiteboards, Tablets & Chromebooks */
+    html, body {
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #FFFBEF 0%, #EDF7FF 55%, #F4FFF8 100%);
+    }
+
+    /* Extra large dynamic clamp sizes */
+    .prompt-text {
+      font-size: clamp(1.4rem, 2.7vw, 2.25rem);
+      line-height: 1.35;
+    }
+    .option-text {
+      font-size: clamp(1.15rem, 2.05vw, 1.65rem);
+      line-height: 1.25;
+    }
+    .badge-letter {
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    }
+    .feedback-text {
+      font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+    }
+
+    /* Pokemon Animations */
+    @keyframes pikaJump {
+      0%, 100% { transform: translateY(0) scale(1); }
+      30% { transform: translateY(-16px) scale(1.12) rotate(-4deg); }
+      60% { transform: translateY(-5px) scale(0.96) rotate(3deg); }
+    }
+    .anim-jump {
+      animation: pikaJump 0.55s ease-in-out;
+    }
+
+    @keyframes shakeHead {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-9px) rotate(-4deg); }
+      40%, 80% { transform: translateX(9px) rotate(4deg); }
+    }
+    .anim-shake {
+      animation: shakeHead 0.45s ease-in-out;
+    }
+
+    .poke-opt {
+      transition: all 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .poke-opt:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.08);
+    }
+    .poke-opt:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+    }
+
+    .compact-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .compact-scroll::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+
+<body class="text-stone-900 antialiased flex flex-col font-sans h-full w-full justify-between p-2 sm:p-3 md:p-4 max-w-6xl mx-auto">
+
+  <!-- TOP BAR: Compact Pokemon Game Header with Bigger Labels -->
+  <header class="w-full bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border-4 border-amber-300 shadow-md px-3 py-1.5 sm:px-5 sm:py-2.5 flex items-center justify-between shrink-0 gap-3">
+    <!-- Logo & Pokeball -->
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="relative w-9 h-9 sm:w-11 sm:h-11 shrink-0 flex items-center justify-center">
+        <!-- SVG Poke Ball -->
+        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
+          <circle cx="50" cy="50" r="48" fill="#EE1515" />
+          <path d="M 2 50 A 48 48 0 0 0 98 50 Z" fill="#FFFFFF" />
+          <path d="M 2 46 L 98 46 L 98 54 L 2 54 Z" fill="#1F2937" />
+          <circle cx="50" cy="50" r="16" fill="#1F2937" />
+          <circle cx="50" cy="50" r="11" fill="#FFFFFF" />
+          <circle cx="50" cy="50" r="6" fill="#CBD5E1" />
+        </svg>
+      </div>
+      <div class="truncate">
+        <h1 class="text-lg sm:text-2xl font-black text-stone-900 tracking-tight flex items-center gap-2 leading-none">
+          國二上 Unit 1 <span class="text-xs sm:text-base bg-poke-yellow text-amber-950 font-black px-2.5 py-0.5 rounded-full border-2 border-amber-400">寶可夢英語道館</span>
+        </h1>
+        <div class="flex items-center gap-2 sm:gap-3 mt-1">
+          <span id="level-badge" class="text-xs sm:text-base font-black text-rose-600">⚡ LV.1 訓練家</span>
+          <span class="text-stone-300 font-black">|</span>
+          <span id="captured-count" class="text-xs sm:text-base font-black text-stone-600">已收服: 0 隻</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center/Right: EXP Bar & Category Selector -->
+    <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+      <!-- HP/EXP Bar -->
+      <div class="hidden lg:flex flex-col items-end w-44">
+        <div class="flex justify-between w-full text-xs font-black text-stone-600 mb-0.5">
+          <span>EXP 經驗值</span>
+          <span id="progress-percent" class="text-poke-blue">0%</span>
+        </div>
+        <div class="w-full bg-stone-200 h-3 rounded-full overflow-hidden border-2 border-stone-300">
+          <div id="exp-bar" class="h-full bg-gradient-to-r from-poke-yellow to-emerald-400 rounded-full transition-all duration-300 w-0"></div>
+        </div>
+      </div>
+
+      <!-- Category Filter Dropdown with Large Font -->
+      <select id="category-selector" onchange="changeCategory(this.value)" class="bg-amber-100 hover:bg-amber-200 border-2 sm:border-3 border-amber-400 text-amber-950 text-xs sm:text-base font-black py-1.5 px-3 rounded-xl sm:rounded-2xl focus:outline-none cursor-pointer">
+        <option value="all">⚡ 全道館大挑戰 (共89題)</option>
+        <option value="vocab">🍓 一、字彙選擇 (20題)</option>
+        <option value="grammar">🍋 二、文法選擇 (30題)</option>
+        <option value="dialogue">🍉 三、對話句子 (5題)</option>
+        <option value="cloze">🏝️ 四、克漏字 (9題)</option>
+        <option value="reading">📚 五、閱讀測驗 (2題)</option>
+        <option value="vocabFill">✏️ 六、文意字彙 (5題)</option>
+        <option value="fillIn">🧩 七、填充題 (7題)</option>
+        <option value="pictureQA">🖼️ 八、看圖回答 (5題)</option>
+        <option value="promptRewrite">🧸 九、依提示作答 (10題)</option>
+        <option value="translation">🎈 十、翻譯 (10題)</option>
+      </select>
+
+      <!-- Sound Button -->
+      <button id="sound-btn" onclick="toggleSound()" class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl border-2 sm:border-3 border-stone-300 bg-stone-50 hover:bg-white flex items-center justify-center text-base sm:text-xl font-bold shadow-sm" title="音效開關">
+        🔊
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN ARENA: Strictly 100vh / 100dvh compliant (flex-1 min-h-0) -->
+  <main class="flex-1 min-h-0 my-2 sm:my-3 flex flex-col justify-between relative">
+    
+    <!-- Outer Card: Zero Scroll, fits viewport dynamically -->
+    <div id="quiz-card" class="bg-white/95 rounded-2xl sm:rounded-3xl border-4 border-amber-300 shadow-poke-card p-3 sm:p-5 md:p-6 flex-1 min-h-0 flex flex-col justify-between relative overflow-hidden">
+      
+      <!-- Card Top: Category pill, Streak & Companion -->
+      <div class="flex items-center justify-between pb-2 border-b-2 border-amber-100 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <span id="q-category-tag" class="bg-amber-100 text-amber-950 border-2 border-amber-300 font-black text-xs sm:text-base px-3 py-1 rounded-full">
+            🍓 一、字彙選擇
+          </span>
+          <span id="q-number-tag" class="text-xs sm:text-base font-black text-stone-500">
+            第 1 / 89 題
+          </span>
+        </div>
+
+        <!-- Pokemon Buddy & Speech Bubble with Big Text -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div id="poke-bubble" class="hidden sm:block text-xs sm:text-sm font-black bg-amber-50 text-amber-950 px-3 py-1 rounded-xl border-2 border-amber-200 shadow-sm">
+            Pika! 準備好了嗎？
+          </div>
+          <div id="poke-avatar" class="text-2xl sm:text-4xl filter drop-shadow cursor-pointer transform hover:scale-110 active:scale-95 transition" onclick="pokeInteract()" title="點我切換寶可夢夥伴！">
+            ⚡
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Middle: Context (Optional) + Ultra Big Prompt -->
+      <div class="flex-1 min-h-0 flex flex-col justify-center my-1.5 sm:my-2 overflow-hidden">
+        
+        <!-- Context Box for Reading or Dialogue (compact, internally scrollable only if very tall) -->
+        <div id="q-context-box" class="hidden max-h-24 sm:max-h-32 overflow-y-auto compact-scroll p-3 rounded-2xl bg-amber-50/90 border-2 border-amber-200 text-sm sm:text-lg text-stone-800 font-bold mb-2 shadow-inner leading-snug">
+        </div>
+
+        <!-- Big Bold Readable Question Prompt (clamp: 1.4rem ~ 2.25rem) -->
+        <div id="q-prompt" class="prompt-text font-black text-stone-900 px-1 select-text">
+          題目載入中...
+        </div>
+
+        <!-- Optional Hint line for text-input -->
+        <div id="q-sub-hint" class="hidden text-sm sm:text-lg font-black text-amber-800 mt-1 px-1"></div>
+      </div>
+
+      <!-- Card Answer Area: Big Option Buttons or Text Input Box -->
+      <div id="q-answer-zone" class="shrink-0 pt-1">
+        <!-- Injected dynamically by JavaScript -->
+      </div>
+
+      <!-- Immediate Feedback Banner with Large Font -->
+      <div id="feedback-panel" class="hidden shrink-0 mt-2 sm:mt-3 pt-2 sm:pt-3 border-t-3 border-dashed border-amber-200">
+        <div id="feedback-banner" class="p-2 sm:p-3.5 rounded-2xl flex items-center justify-between gap-3 bg-emerald-50 border-3 border-emerald-400">
+          <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <span id="feedback-icon" class="text-2xl sm:text-4xl shrink-0">⭐</span>
+            <div class="min-w-0">
+              <div id="feedback-title" class="feedback-text font-black text-emerald-950 truncate">太神了！收服成功！</div>
+              <div id="feedback-detail" class="text-xs sm:text-base font-bold text-stone-700 truncate"></div>
+            </div>
+          </div>
+          <button id="next-btn" onclick="goToNextQuestion()" class="shrink-0 px-4 py-2 sm:px-7 sm:py-3 bg-gradient-to-r from-poke-red to-rose-600 hover:from-rose-600 hover:to-poke-red text-white font-black text-sm sm:text-xl rounded-xl sm:rounded-2xl shadow-md active:scale-95 transition flex items-center gap-2">
+            <span>下一題</span>
+            <span class="text-xs sm:text-base bg-white/20 px-2 py-0.5 rounded-lg">Enter ➔</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER CONTROLS: Height ~ 34px -->
+  <footer class="w-full flex items-center justify-between text-xs sm:text-base font-black text-stone-600 px-2 shrink-0">
+    <div class="flex items-center gap-3 sm:gap-5">
+      <button onclick="skipQuestion()" class="hover:text-poke-red transition flex items-center gap-1">
+        <span>↷</span> 跳過此題
+      </button>
+      <button onclick="restartCurrentSet()" class="hover:text-poke-blue transition flex items-center gap-1">
+        <span>↺</span> 重新挑戰
+      </button>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <span class="hidden sm:inline text-stone-400 font-bold text-xs sm:text-sm">快速鍵：鍵盤 [A][B][C][D] 或 [1][2][3][4]，[Enter] 下一題</span>
+      <span id="streak-indicator" class="text-poke-red font-black text-sm sm:text-lg">🔥 0 連勝</span>
+    </div>
+  </footer>
+
+  <!-- MODAL: VICTORY & SUMMARY -->
+  <div id="result-modal" class="fixed inset-0 bg-stone-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+    <div class="bg-white rounded-3xl max-w-sm sm:max-w-lg w-full p-5 sm:p-7 border-4 border-poke-yellow text-center relative shadow-2xl">
+      <div class="w-16 h-16 sm:w-24 sm:h-24 mx-auto -mt-12 sm:-mt-16 mb-2 bg-gradient-to-tr from-poke-yellow to-amber-400 rounded-3xl flex items-center justify-center text-3xl sm:text-5xl shadow-xl border-4 border-white">
+        🏆
+      </div>
+
+      <h3 class="text-2xl sm:text-3xl font-black text-stone-900" id="res-headline">道館試煉通關！</h3>
+      <p class="text-sm sm:text-base font-bold text-stone-500 mt-1" id="res-sub">國二上 Unit 1 英語探險結算</p>
+
+      <div class="my-4 bg-amber-50 p-4 sm:p-5 rounded-2xl border-3 border-amber-300">
+        <div class="text-4xl sm:text-6xl font-black text-poke-red" id="res-score">
+          0 <span class="text-lg text-stone-500 font-bold">分</span>
+        </div>
+        <div class="mt-1 text-base sm:text-xl font-black text-stone-800">
+          正確率：<span class="text-poke-blue font-black" id="res-accuracy">0%</span>
+        </div>
+        <div class="mt-2 inline-block bg-poke-red text-white font-black text-sm sm:text-base px-4 py-1.5 rounded-full" id="res-rank-label">
+          大師級訓練家 ⚡
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 mb-4 text-sm sm:text-base font-black">
+        <div class="bg-emerald-50 border-2 border-emerald-300 p-2.5 rounded-xl text-emerald-900">
+          <div>完美答對</div>
+          <div class="text-2xl sm:text-3xl mt-0.5" id="res-correct-count">0 題</div>
+        </div>
+        <div class="bg-rose-50 border-2 border-rose-300 p-2.5 rounded-xl text-rose-900">
+          <div>逃走的寶可夢</div>
+          <div class="text-2xl sm:text-3xl mt-0.5" id="res-wrong-count">0 題</div>
+        </div>
+      </div>
+
+      <div class="space-y-2.5">
+        <button id="review-wrong-btn" onclick="startReviewWrongOnly()" class="w-full py-3 bg-amber-400 hover:bg-amber-500 text-amber-950 font-black text-base sm:text-lg rounded-xl shadow transition hidden">
+          🔁 重練剛才逃走的寶可夢 (<span id="wrong-count-txt">0</span>)
+        </button>
+        <button onclick="restartCurrentSet()" class="w-full py-3 bg-poke-blue hover:bg-blue-600 text-white font-black text-base sm:text-lg rounded-xl shadow transition">
+          ✨ 重新挑戰本次關卡
+        </button>
+        <button onclick="closeModal()" class="w-full py-2 bg-stone-100 hover:bg-stone-200 text-stone-600 font-bold text-sm rounded-xl transition">
+          返回題卡
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Complete 89-Question Dataset directly transcribed from exam paper & answer key
+    const RAW_QUESTIONS = [
+      // 1. 字彙選擇 (20題)
+      {
+        id: "v1", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "Jane doesn’t know what “give away” means in the reading.<br><span class='text-amber-800 text-base sm:text-lg font-extrabold'>What does “give away” mean here?</span>",
+        context: "Dennis has a lot of books and toys in his house. One day, he reads a report about a story in children’s home. Children at children’s home usually don’t have many toys, so Dennis gives away all his old toys to those kids!",
+        options: ["To tell people something.", "To give something to someone.", "To make money.", "To sell all of something."],
+        ans: "B",
+        explain: "Dennis 免費將舊玩具贈送給育幼院的孩子，故 give away 在此為「To give something to someone（免費贈與某人）」。"
+      },
+      {
+        id: "v2", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "It’s so _______. I need a fan and cold drinks.",
+        options: ["cold", "hot", "warm", "cool"],
+        ans: "B",
+        explain: "需要電風扇 (fan) 與冷飲 (cold drinks)，代表天氣非常炎熱 (hot)。"
+      },
+      {
+        id: "v3", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "It was very _______ this morning. My hat was blown away（被吹走）when I was walking on the street.〔94.基測Ⅱ〕",
+        options: ["cloudy", "dry", "warm", "windy"],
+        ans: "D",
+        explain: "帽子被風吹走 (blown away)，代表早上風很大 (windy)。"
+      },
+      {
+        id: "v4", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "It is raining cats and dogs（正下著傾盆大雨）. The rain is too _______.",
+        options: ["big", "long", "heavy", "good"],
+        ans: "C",
+        explain: "英語形容雨勢大使用 heavy rain，不能說 big rain。"
+      },
+      {
+        id: "v5", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "In Taiwan, the _______ months are December, January, and February.",
+        options: ["winter", "fall", "summer", "spring"],
+        ans: "A",
+        explain: "12月、1月、2月在台灣為冬季 (winter)。"
+      },
+      {
+        id: "v6", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "There are a lot of _______, so we can’t see the moon this evening.",
+        options: ["seasons", "suns", "gifts", "clouds"],
+        ans: "D",
+        explain: "晚上看不見月亮是因為雲層 (clouds) 太多遮蔽了。"
+      },
+      {
+        id: "v7", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "There are four _______ in a year.",
+        options: ["seasons", "days", "weeks", "months"],
+        ans: "A",
+        explain: "一年有「四個季節」(four seasons)。"
+      },
+      {
+        id: "v8", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "Because the rain was too _______, we didn’t go out.",
+        options: ["big", "heavy", "a lot", "a lot of"],
+        ans: "B",
+        explain: "形容雨勢過大用 heavy。"
+      },
+      {
+        id: "v9", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "There is not any _______ in Tainan. It’s usually warm there.",
+        options: ["snow", "water", "cloud", "mountain"],
+        ans: "A",
+        explain: "台南冬天通常溫暖，不會有下雪 (snow)。"
+      },
+      {
+        id: "v10", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "My friend sent me a _______ when she was in India.",
+        options: ["cloud", "season", "uncle", "postcard"],
+        ans: "D",
+        explain: "在印度旅行寄了一張「明信片」(postcard) 給我。"
+      },
+      {
+        id: "v11", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "It’s not a good idea to go mountain climbing in this bad _______. We should wait until the typhoon goes away.〔113.會考〕",
+        options: ["chance", "dream", "habit", "weather"],
+        ans: "D",
+        explain: "颱風來臨代表惡劣的「天氣 (weather)」。"
+      },
+      {
+        id: "v12", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "I finished my sandwich, but I was still hungry, so I ate _______ one with some juice.",
+        options: ["mad", "another", "fun", "heavy"],
+        ans: "B",
+        explain: "吃完還很餓，所以再吃「另一個 (another one)」。"
+      },
+      {
+        id: "v13", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "(At a museum in Australia)<br>Zac: A man just said, “How ya goin’?” to me.<br>Jamie: Oh, that just _______ “How are you doing?” in Australian English.",
+        options: ["meant", "gave", "showed", "sent"],
+        ans: "A",
+        explain: "mean 代表「意思是...」，此處為過去式 meant。"
+      },
+      {
+        id: "v14", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "It rained every day during our summer vacation. My cousin and I didn’t go swimming or take a walk. He just sat on the sofa and said, “This is not _______ at all.”",
+        options: ["warm", "fun", "sunny", "lovely"],
+        ans: "B",
+        explain: "整天被困在家裡下雨，一點都「不好玩 (not fun at all)」。"
+      },
+      {
+        id: "v15", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "Tom has two rulers. He can _______ one to me.",
+        options: ["borrow", "lend", "hate", "read"],
+        ans: "B",
+        explain: "lend ... to ... 表示「借出給他人」；borrow 是「向他人借入」。"
+      },
+      {
+        id: "v16", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "Mark: I _______ you a postcard from Taiwan. Did you get it?<br>Nancy: I got it yesterday. It’s beautiful. Thank you.",
+        options: ["gave", "lent", "sent", "borrowed"],
+        ans: "C",
+        explain: "寄送明信片用 send，過去式為 sent。"
+      },
+      {
+        id: "v17", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "How _______ the old man is! He smiled and said “go die” to me.",
+        options: ["strange", "kind", "heavy", "windy"],
+        ans: "A",
+        explain: "對著人微笑卻說奇怪的話，真是太「奇怪了 (strange)」。"
+      },
+      {
+        id: "v18", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "The rain today is really _______. Let’s not go out for dinner.",
+        options: ["big", "kind", "cold", "heavy"],
+        ans: "D",
+        explain: "雨勢很大用 heavy。"
+      },
+      {
+        id: "v19", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "Sandy is in Taiwan. I _______ her a gift from India last week.",
+        options: ["sent", "hated", "spoke", "gave"],
+        ans: "A",
+        explain: "從印度跨國寄送 (sent) 禮物給她。"
+      },
+      {
+        id: "v20", cat: "vocab", catLabel: "🍓 一、字彙選擇", score: 1, type: "choice",
+        prompt: "The weather is going to be really _______, so I don’t think you should take a heavy coat on your trip.〔97.基測Ⅰ〕",
+        options: ["clear but windy", "cold but dry", "cool and wet", "hot and sunny"],
+        ans: "D",
+        explain: "不需要厚外套 (heavy coat)，說明氣候「炎熱晴朗 (hot and sunny)」。"
+      },
+
+      // 2. 文法選擇 (30題)
+      { id: "g1", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Nick: How was the weather yesterday?<br>Uma: It _______ a lot in the morning, so my family and I drank hot tea at home.", options: ["rains", "is raining", "rained", "rain"], ans: "C", explain: "時間副詞為 yesterday，動詞使用過去式 rained。" },
+      { id: "g2", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "In the past, my family ate moon cakes and pomelos on the Moon Festival. And my father often _______ some pomelo hats for me. It was very fun!", options: ["make", "is making", "made", "makes"], ans: "C", explain: "過去經歷 (In the past)，使用 make 的過去式 made。" },
+      { id: "g3", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Jenny: Yesterday was my birthday. Andy treated me to dinner and _______.<br>Peter: Wow! He loves you very much.<br>Jenny: Sure. And I was happy last night.", options: ["makes a card for me", "made a card to me", "is making a card to me", "made a card for me"], ans: "D", explain: "過去式 made；且 make 的授與介系詞搭配 for（made a card for me）。" },
+      { id: "g4", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Ann: _______ is the weather like in winter?<br>Leo: _______ a lot of snow.", options: ["What; There are", "How; There is", "What; There is", "How; There are"], ans: "C", explain: "有 like 用 What... like 提問；snow 為不可數名詞用 There is。" },
+      { id: "g5", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "In Taiwan, which months are the _______ season?", options: ["raining", "rain", "rainy", "rains"], ans: "C", explain: "修飾名詞 season 需要形容詞 rainy（rainy season 雨季）。" },
+      { id: "g6", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Ann: Who gave the gift _______ you?<br>Bob: My parents.", options: ["in", "to", "for", "at"], ans: "B", explain: "give sth to sb（介系詞用 to）。" },
+      { id: "g7", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ in July and August _______ very hot.", options: ["It; is", "The weather; is", "They; are", "The weather; are"], ans: "B", explain: "The weather 為單數不可數名詞，be 動詞用 is。" },
+      { id: "g8", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Our coffee shop is big, but theirs _______ small.", options: ["is", "are", "isn’t", "aren’t"], ans: "A", explain: "theirs 代表 their coffee shop (單數)，故填 is。" },
+      { id: "g9", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Jim: Do you _______ in Tainan in winter?<br>Sam: No, it never _______ here in winter.", options: ["snow; snow", "have snow; snows", "be snowy; snowy", "have snow; snow"], ans: "B", explain: "Do you have snow...？第二格主詞是 it (單數第三人稱)，一般動詞加 s 變 snows。" },
+      { id: "g10", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ lots of snow in New York, the USA. It’s very cold there.", options: ["We have", "It’s", "There’s", "The weather is"], ans: "C", explain: "There is (There's) lots of snow 表存在有許多雪。" },
+      { id: "g11", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Jane: Do you have lots of _______ in winter?<br>Beth: No, but it’s _______ and cold.", options: ["snowy; wind", "snowy; windy", "snow; windy", "snow; wind"], ans: "C", explain: "lots of 後接名詞 snow；it's 後接形容詞 windy。" },
+      { id: "g12", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Jeff: _______ lots of snow there in winter?<br>Lisa: Yes, _______ a lot.", options: ["Are there; we have snow", "Is there; it snows", "Do we have; there’s snow", "Does it; it’s snowy"], ans: "B", explain: "不可數名詞疑問句用 Is there；簡答 it snows a lot。" },
+      { id: "g13", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "It sometimes _______ here in winter.", options: ["is snowy", "snows", "has snow", "is lots of snow"], ans: "B", explain: "主詞 It，頻率副詞 sometimes 後接單三動詞 snows。" },
+      { id: "g14", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Uncle Sam _______ a robot for me on my birthday.", options: ["sent", "showed", "made", "gave"], ans: "C", explain: "介系詞使用 for me，動詞為 make 的過去式 made。" },
+      { id: "g15", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "It’s _______ today. Let’s take our daughter to the park and let her fly her favorite kite.", options: ["hot and sunny", "cold and snowy", "windy and cloudy", "warm and rainy"], ans: "C", explain: "放風箏 (fly a kite) 需要起風的天氣 (windy)。" },
+      { id: "g16", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Here’s a red jacket _______ you.", options: ["of", "to", "for", "on"], ans: "C", explain: "這是一件給你的紅夾克：Here's a red jacket for you。" },
+      { id: "g17", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Kids at the children’s home may need some help from us. We can send some clothes _______ them.", options: ["for", "at", "of", "to"], ans: "D", explain: "send sth to sb（寄東西給某人，用 to）。" },
+      { id: "g18", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "He made _______ last night.", options: ["me it", "it to me", "a card to her", "them for her"], ans: "D", explain: "代名詞當物受詞必須放動詞後，介系詞用 for：made them for her。" },
+      { id: "g19", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ a lot there in winter.", options: ["They have snow", "There is snow", "It snows", "It’s snowy"], ans: "C", explain: "a lot 當副詞修飾動詞：It snows a lot。" },
+      { id: "g20", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Jill: What did you _______ for your son on his birthday?<br>Mia: He _______ a cap for his birthday this year.", options: ["give; bought", "made; sent", "buy; got", "show; gave"], ans: "C", explain: "助動詞 did 後接原形動詞 buy ... for；答句主詞是他得到 (got) 一頂帽子。" },
+      { id: "g21", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "The teacher is showing a picture _______ the students.", options: ["for", "of", "to", "with"], ans: "C", explain: "show sth to sb（展示給某人看，用 to）。" },
+      { id: "g22", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ a lot of rain in summer.", options: ["It is", "They are", "There are", "There is"], ans: "D", explain: "rain 不可數名詞，存在句用 There is。" },
+      { id: "g23", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ raining cats and dogs. We can’t play basketball at the park. What else can we do?", options: ["It’s", "The weather is", "There’s", "We have"], ans: "A", explain: "現在進行式下雨用 It's raining (It is raining)。" },
+      { id: "g24", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Sam: How’s the weather in London _______ summer?<br>Emi: It’s warm and rainy.", options: ["like; on", "×; in", "like; in", "×; at"], ans: "B", explain: "How is the weather 不加 like；季節前置詞用 in summer。" },
+      { id: "g25", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Iris: _______ it snow a lot in Japan at this time of year?<br>Beth: Yes, _______ snowy there at this time of year. The white snow is so beautiful.", options: ["Does; it’s", "Does; there’s", "Is; they have", "Is; it’s"], ans: "A", explain: "原形動詞 snow 疑問句用助動詞 Does it snow；答句形容詞 snowy 前用 it's。" },
+      { id: "g26", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ rained and snowed a lot last year.", options: ["There were", "There was", "It", "They had"], ans: "C", explain: "動詞 rained / snowed 以虛主詞 It 當主詞。" },
+      { id: "g27", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Andy: _______ the weather like here in spring?<br>Lily: _______ warm and rainy.", options: ["How’s; It’s", "How does; The weather is", "What’s; It’s", "What does; The weather is"], ans: "C", explain: "有 like 用 What's the weather like；答句用 It's。" },
+      { id: "g28", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "_______ windy and cool in Taipei today. Is there a lot of wind in Taichung?", options: ["Weather is", "There is", "It’s", "We have"], ans: "C", explain: "形容詞 windy and cool 前用主詞 It's。" },
+      { id: "g29", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "Here _______ a cap for you. You may need it under the sun.", options: ["has", "is", "have", "are"], ans: "B", explain: "單數名詞 a cap，倒裝句用 Here is。" },
+      { id: "g30", cat: "grammar", catLabel: "🍋 二、文法選擇", score: 1, type: "choice", prompt: "I _______ some postcards for the kids yesterday.", options: ["gave", "sent", "bought", "showed"], ans: "C", explain: "介系詞使用 for the kids，故動詞選 bought (buy ... for)。" },
+
+      // 3. 對話與完成句子 (5題)
+      { id: "d1", cat: "dialogue", catLabel: "🍉 三、對話與句子", score: 1, type: "choice", prompt: "In winter and early spring, _______.", options: ["my aunt bought it for me", "people go to high mountains to watch snow", "that’s cool", "that’s a nice green snowboard"], ans: "B", explain: "在冬季和初春，人們會去高山賞雪 (people go to high mountains to watch snow)。" },
+      { id: "d2", cat: "dialogue", catLabel: "🍉 三、對話與句子", score: 1, type: "choice", prompt: "The snowboard is Tina’s; _______.", options: ["you ordered cookies", "I gave it to her for her birthday", "it’s sunny and windy today", "her aunt bought them for her"], ans: "B", explain: "滑雪板是單數，代名詞用 it：I gave it to her for her birthday。" },
+      { id: "d3", cat: "dialogue", catLabel: "🍉 三、對話與句子", score: 1, type: "choice", prompt: "Pete: _______<br>Iris: That’s nice of him. It’s cool!", options: ["I sent you a jacket from Taiwan. Did you get it?", "My cousin gave this jacket to me.", "I bought a snowboard for my uncle.", "I ordered cookies and pizza."], ans: "B", explain: "Iris 回答 That's nice of him (他真好)，主詞必須是男性（表哥送夾克給我）。" },
+      { id: "d4", cat: "dialogue", catLabel: "🍉 三、對話與句子", score: 1, type: "choice", prompt: "Lucy: Your kite is so beautiful! Did you make it?<br>Jack: No, _______.", options: ["my dad made it for me yesterday", "I saw a big kite in the park", "my friend has the different kite", "the wind is strong today"], ans: "A", explain: "回答否定 No，接著說明是我爸爸昨天做給我的。" },
+      { id: "d5", cat: "dialogue", catLabel: "🍉 三、對話與句子", score: 1, type: "choice", prompt: "Lily: What’s the weather like in Australia in summer?<br>Benny: It _______, and people often go swimming at the beach.", options: ["is hot and sunny", "was rainy last month", "snows a lot in July", "is cold in the morning"], ans: "A", explain: "夏天大家常去海邊游泳，代表天氣炎熱晴朗 (is hot and sunny)。" },
+
+      // 4. 克漏字測驗 (9題)
+      {
+        id: "cl1_1", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章1)", score: 1, type: "choice",
+        context: "Sandy: (1) _______ is the weather like today?<br>Cindy: It’s hot, but it is raining.<br>Sandy: Again? There (2) _______ a lot of rain here in summer.<br>Cindy: Well, it’s the rainy season now.<br>Sandy: ... You can use my umbrella.<br>Cindy: That’s kind (3) _______ you. Thank you!",
+        prompt: "題號 (1)：Sandy: (1) _______ is the weather like today?",
+        options: ["How", "What", "Which", "Where"], ans: "B", explain: "句尾有 like 時疑問詞搭配 What。"
+      },
+      {
+        id: "cl1_2", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章1)", score: 1, type: "choice",
+        context: "Sandy: There (2) _______ a lot of rain here in summer.<br>Cindy: Well, it’s the rainy season now.",
+        prompt: "題號 (2)：There (2) _______ a lot of rain here in summer.",
+        options: ["be", "is", "are", "was"], ans: "B", explain: "rain 為不可數名詞，現在式配 is。"
+      },
+      {
+        id: "cl1_3", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章1)", score: 1, type: "choice",
+        context: "Cindy: That’s kind (3) _______ you. Thank you!",
+        prompt: "題號 (3)：That’s kind (3) _______ you.",
+        options: ["of", "to", "about", "for"], ans: "A", explain: "表達對他人為人善良感激的習慣用法：That's kind of you。"
+      },
+      {
+        id: "cl2_1", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章2 熱浪)", score: 1, type: "choice",
+        context: "This is a heat wave. A heat wave happens when (1) _______. The wind is not strong, and the temperature is going up. During a heat wave, (2) _______. (3) _______ and be in a cool place.",
+        prompt: "題號 (1)：A heat wave happens when (1) _______.",
+        options: ["the air is not clean enough", "it rains a lot in different places", "the sun does not go out", "hot air comes with heat"], ans: "D", explain: "熱浪的成因是乾熱空氣湧入：hot air comes with heat。"
+      },
+      {
+        id: "cl2_2", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章2 熱浪)", score: 1, type: "choice",
+        context: "During a heat wave, (2) _______. Some may get heat stroke. Old people and children must be careful, and we need water to stay cool.",
+        prompt: "題號 (2)：During a heat wave, (2) _______.",
+        options: ["people can go out and do some exercise", "water is not easy for you to get", "people are tired, thirsty, or sick", "children can be home and don’t go to school"], ans: "C", explain: "酷暑熱浪中人們會疲憊、口渴甚至生病中暑：people are tired, thirsty, or sick。"
+      },
+      {
+        id: "cl2_3", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章2 熱浪)", score: 1, type: "choice",
+        context: "(3) _______ and be in a cool place. A fan can help. Do not go out in the afternoon.",
+        prompt: "題號 (3)：(3) _______ and be in a cool place.",
+        options: ["Do not be at home", "Drink a lot of water", "Put your umbrella at home", "Turn off your fan"], ans: "B", explain: "抗熱叮嚀：多喝水 (Drink a lot of water)。"
+      },
+      {
+        id: "cl3_1", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章3 蜂蜜檸檬)", score: 1, type: "choice",
+        context: "Allen: Good afternoon, Linda. What are you doing?<br>Linda: I’m drinking honey lemonade.<br>Allen: (1) _______<br>Linda: No. I don’t. Why did you say so?<br>Allen: I usually drink it for a cough.",
+        prompt: "題號 (1)：Allen 的問句為何？",
+        options: ["Can you make honey cake?", "Do you have a cough?", "Do you buy many lemons for me?", "Where do you buy it?"], ans: "B", explain: "由後文「No, I don't」以及 Allen 說自己咳嗽才喝，可知問句為：Do you have a cough?"
+      },
+      {
+        id: "cl3_2", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章3 蜂蜜檸檬)", score: 1, type: "choice",
+        context: "Linda: Are you sure? It is helpful for a cough. (2) _______<br>Allen: Do you often drink honey with lemons?",
+        prompt: "題號 (2)：Linda 覺得這項效果如何？",
+        options: ["That’s cool.", "It’s kind of her.", "Have a nice meal.", "It’s hard to say."], ans: "A", explain: "得知蜂蜜檸檬能舒緩咳嗽，Linda 表示「太酷了！(That’s cool.)」。"
+      },
+      {
+        id: "cl3_3", cat: "cloze", catLabel: "🏝️ 四、克漏字 (篇章3 蜂蜜檸檬)", score: 1, type: "choice",
+        context: "Linda: Sometimes I may also drink it before I go to bed. (3) _______<br>Allen: I will tell my grandpa about that. He can’t sleep well.",
+        prompt: "題號 (3)：睡前喝有什麼功效？",
+        options: ["Honey is very little.", "You can’t hurt me.", "It helps my homework.", "It can help me sleep well."], ans: "D", explain: "後句提到爺爺睡不好，因此本句是「能幫助我睡得好 (It can help me sleep well)」。"
+      },
+
+      // 5. 閱讀測驗 (2小題)
+      {
+        id: "rd1", cat: "reading", catLabel: "📚 五、閱讀測驗", score: 0.5, type: "choice",
+        context: "Jasper was on his way home. An old man was hit by a car and lost his left arm and left leg. Later Jasper saw him again. The old man said, “Well, I am all right now.” He showed Jasper his right arm and right leg.<br>Here “right” in “all right” (okay) and “right” (右邊) are homonyms (同形異義字).",
+        prompt: "(１) What do we know from the story?",
+        options: ["The old man died.", "Jasper’s car hit the old man.", "The weather that night was nice.", "The old man only has one arm and one leg now."], ans: "D",
+        explain: "老先生失去了左手與左腳，故目前只剩下一隻手和一隻腳。"
+      },
+      {
+        id: "rd2", cat: "reading", catLabel: "📚 五、閱讀測驗", score: 0.5, type: "choice",
+        context: "a. What do you call hot snow? Water.<br>b. Why wasn’t the moon hungry? Because it was <u>full</u>. (吃飽 / 滿月)<br>c. Why does every girl hate the sun? Because it is not <u>cool</u>. (涼爽 / 酷酷的)<br>d. What goes up when the rain comes down? An umbrella.",
+        prompt: "(２) Which uses homonyms (雙關同形異義字)?",
+        options: ["a. and b.", "c. and d.", "b. and c.", "a., b., and d."], ans: "C",
+        explain: "b 的 full (吃飽/滿月) 與 c 的 cool (涼爽/酷) 都是利用雙關字的英文冷笑話。"
+      },
+
+      // 6. 文意字彙 (5題)
+      {
+        id: "vf1", cat: "vocabFill", catLabel: "✏️ 六、文意字彙", score: 1, type: "text",
+        prompt: "It was <strong>s_______e</strong>. When I ordered cookies and chocolate, the clerk said, “Bikkies and chokkie.”",
+        hint: "s 開頭 e 結尾 (奇怪的)", ansList: ["strange"], explain: "奇怪的：strange。"
+      },
+      {
+        id: "vf2", cat: "vocabFill", catLabel: "✏️ 六、文意字彙", score: 1, type: "text",
+        prompt: "Alex: Who <strong>g_______e</strong> you the gift?<br>Mary: Who else? My boyfriend did.",
+        hint: "g 開頭 e 結尾 (give 的過去式)", ansList: ["gave"], explain: "由 did 可知填過去式 gave。"
+      },
+      {
+        id: "vf3", cat: "vocabFill", catLabel: "✏️ 六、文意字彙", score: 1, type: "text",
+        prompt: "I thought he was mad at me, but that <strong>m_______nt</strong> “hello.”",
+        hint: "m 開頭 nt 結尾 (mean 的過去式)", ansList: ["meant"], explain: "mean 的過去式：meant。"
+      },
+      {
+        id: "vf4", cat: "vocabFill", catLabel: "✏️ 六、文意字彙", score: 1, type: "text",
+        prompt: "I borrowed Martin’s gloves, and he also <strong>l_______t</strong> me a jacket.",
+        hint: "l 開頭 t 結尾 (lend 的過去式)", ansList: ["lent"], explain: "借給 (lend) 的過去式：lent。"
+      },
+      {
+        id: "vf5", cat: "vocabFill", catLabel: "✏️ 六、文意字彙", score: 1, type: "text",
+        prompt: "He looks young. In <strong>f_______t</strong>, he is 50 years old.",
+        hint: "f 開頭 t 結尾 (片語：事實上)", ansList: ["fact"], explain: "in fact 事實上。"
+      },
+
+      // 7. 填充題 (7題)
+      {
+        id: "fi1", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "The (s) _______ months are June, July, and August.",
+        hint: "六、七、八月是夏天的月份", ansList: ["summer"], explain: "夏季月份填 summer。"
+      },
+      {
+        id: "fi2", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "My parents sent me a gift _______ the U.S.A.",
+        hint: "介系詞：從 (從美國寄來)", ansList: ["from"], explain: "從...寄來填 from。"
+      },
+      {
+        id: "fi3", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "_______ the weather in Taiwan in fall?",
+        hint: "詢問天氣疑問詞 + be動詞", ansList: ["How's", "How is"], explain: "How's the weather in Taiwan in fall?"
+      },
+      {
+        id: "fi4_1", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "Ann: (4-A) _______ there lots of snow in Japan in winter?<br>Sue: Yes. It (4-B) _______ a lot there in winter.",
+        hint: "第 (4-A) 格：be動詞單數 (注意字首大寫)", ansList: ["Is"], explain: "不可數名詞 snow 的疑問句：Is there...?"
+      },
+      {
+        id: "fi4_2", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "Ann: Is there lots of snow in Japan in winter?<br>Sue: Yes. It (4-B) _______ a lot there in winter.",
+        hint: "第 (4-B) 格：下雪 (第三人稱單數動詞)", ansList: ["snows"], explain: "主詞是 It，一般動詞填 snows。"
+      },
+      {
+        id: "fi5_1", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "Meg: Who bought the milkshake (5-A) _______ you?<br>Leo: Mom (5-B) _______.",
+        hint: "第 (5-A) 格：買給你的介系詞", ansList: ["for"], explain: "buy 授與介系詞搭配 for。"
+      },
+      {
+        id: "fi5_2", cat: "fillIn", catLabel: "🧩 七、填充題", score: 1, type: "text",
+        prompt: "Meg: Who bought the milkshake for you?<br>Leo: Mom (5-B) _______.",
+        hint: "第 (5-B) 格：過去式助動詞簡答", ansList: ["did"], explain: "過去式簡答動詞用 did。"
+      },
+
+      // 8. 看圖回答問題 (5題)
+      {
+        id: "pqa1", cat: "pictureQA", catLabel: "🖼️ 八、看圖回答", score: 0.5, type: "text",
+        context: "🍪 👩‍🏫【情境提示】學生們手做美味手工餅乾送給老師。",
+        prompt: "What did they make for their teacher?",
+        hint: "完整句回答（以 They made 開頭）",
+        ansList: ["They made cookies for their teacher.", "They made cookies for their teacher"],
+        explain: "標準答句：They made cookies for their teacher."
+      },
+      {
+        id: "pqa2", cat: "pictureQA", catLabel: "🖼️ 八、看圖回答", score: 0.5, type: "text",
+        context: "☁️ ⛅【情境提示】今天下午天空中布滿厚厚雲層（多雲）。",
+        prompt: "A: How was the weather this afternoon?<br>B: ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿",
+        hint: "以 It was... 回答天氣多雲",
+        ansList: ["It was cloudy this afternoon.", "It was cloudy.", "It was cloudy", "It was cloudy this afternoon"],
+        explain: "標準答句：It was cloudy (this afternoon)."
+      },
+      {
+        id: "pqa3", cat: "pictureQA", catLabel: "🖼️ 八、看圖回答", score: 0.5, type: "text",
+        context: "📮 🏞️【情境提示】女孩手拿明信片，並沒有買外套。",
+        prompt: "Didn’t the girl buy a jacket today?",
+        hint: "以 No 開頭，回答她買了一張明信片",
+        ansList: ["No, the girl bought a postcard today.", "No, she bought a postcard today.", "No, the girl bought a postcard.", "No, she bought a postcard."],
+        explain: "標準答句：No, the girl / she bought a postcard today."
+      },
+      {
+        id: "pqa4", cat: "pictureQA", catLabel: "🖼️ 八、看圖回答", score: 0.5, type: "text",
+        context: "🌧️ 🌸【情境提示】台北春天的天氣總是下著雨 (rainy)。",
+        prompt: "A: What’s the weather like in Taipei in spring?<br>B: ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿",
+        hint: "用 It's rainy... 回答",
+        ansList: ["It's rainy in Taipei in spring.", "It is rainy in Taipei in spring.", "It's rainy.", "It is rainy.", "It's rainy"],
+        explain: "標準答句：It's rainy (in Taipei in spring)."
+      },
+      {
+        id: "pqa5", cat: "pictureQA", catLabel: "🖼️ 八、看圖回答", score: 0.5, type: "text",
+        context: "🇮🇳 😄【情境提示】Jocelyn 去印度旅行玩得非常開心。",
+        prompt: "How was Jocelyn’s trip to India?（用 ... had... 作答）",
+        hint: "以 She had... 回答玩得很開心",
+        ansList: ["She had a good time.", "She had a good time", "She had a great time."],
+        explain: "標準答句：She had a good time."
+      },
+
+      // 9. 依提示作答 (10題)
+      {
+        id: "pr1", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "It rains a lot here in summer.（用 We 開頭改寫）",
+        hint: "We have a lot of...",
+        ansList: ["We have a lot of rain here in summer."],
+        explain: "以人當受詞改寫：We have a lot of rain here in summer."
+      },
+      {
+        id: "pr2", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "<u>I had a good time</u> during my trip to Australia.（依畫線部分造原問句）",
+        hint: "How was your trip...",
+        ansList: ["How was your trip to Australia?"],
+        explain: "詢問旅程如何：How was your trip to Australia?"
+      },
+      {
+        id: "pr3", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "a / you / I / sent / from / India / postcard / .（重組句子）",
+        hint: "主詞 I 開頭",
+        ansList: ["I sent you a postcard from India."],
+        explain: "標準重組句：I sent you a postcard from India."
+      },
+      {
+        id: "pr4", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "Australia / trip / was / How / to / your / ?（重組句子）",
+        hint: "How was 開頭",
+        ansList: ["How was your trip to Australia?"],
+        explain: "標準問句：How was your trip to Australia?"
+      },
+      {
+        id: "pr5", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "so / My jacket / enough / not / warm / was / my aunt / to / me / gave / her jacket / , / .（重組）",
+        hint: "My jacket was not warm enough,...",
+        ansList: [
+          "My jacket was not warm enough, so my aunt gave her jacket to me.",
+          "My jacket was not warm enough, so my aunt gave me her jacket."
+        ],
+        explain: "標準句：My jacket was not warm enough, so my aunt gave her jacket to me."
+      },
+      {
+        id: "pr6", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "Uncle Billy made <u>cookies</u> for me yesterday.（把畫線部分改成代名詞）",
+        hint: "cookies 複數代名詞用 them",
+        ansList: ["Uncle Billy made them for me yesterday."],
+        explain: "代名詞改寫：Uncle Billy made them for me yesterday."
+      },
+      {
+        id: "pr7", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "Here / picture / my uncle and me.（依字序造句）",
+        hint: "Here is a picture of...",
+        ansList: ["Here is a picture of my uncle and me."],
+        explain: "依字序造句：Here is a picture of my uncle and me."
+      },
+      {
+        id: "pr8", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "Winter is cold.（用 It 開頭改寫）",
+        hint: "It is cold in...",
+        ansList: ["It is cold in winter.", "It's cold in winter."],
+        explain: "以虛主詞 It 改寫：It is cold in winter."
+      },
+      {
+        id: "pr9", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        context: "例：I showed him my art report. → I showed my art report to him.",
+        prompt: "仿例句改寫：Can you buy me some milk?",
+        hint: "注意 buy 的介系詞搭配 for",
+        ansList: ["Can you buy some milk for me?"],
+        explain: "改寫為：Can you buy some milk for me?"
+      },
+      {
+        id: "pr10", cat: "promptRewrite", catLabel: "🧸 九、依提示作答", score: 1, type: "text",
+        prompt: "Dad / for / it / the USA / got / in / I /.（重組）",
+        hint: "I got it for Dad...",
+        ansList: ["I got it for Dad in the USA."],
+        explain: "標準重組句：I got it for Dad in the USA."
+      },
+
+      // 10. 翻譯 (10題)
+      {
+        id: "tr1", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "天氣冷，而且下雨持續了幾天。（It... and it...）",
+        hint: "It was cold, and it rained for a few days.",
+        ansList: [
+          "It was cold, and it rained for a few days.",
+          "It was cold and it rained for a few days."
+        ],
+        explain: "標準翻譯：It was cold, and it rained for a few days."
+      },
+      {
+        id: "tr2", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "我在澳洲拜訪了我的叔叔和嬸嬸。<br>I _______ my uncle and aunt in Australia.",
+        hint: "拜訪 (visit) 的過去式",
+        ansList: ["visited"],
+        explain: "拜訪的過去式填 visited。"
+      },
+      {
+        id: "tr3", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "我們買了一件夾克並寄給她了。",
+        hint: "We bought a jacket and sent it to her.",
+        ansList: ["We bought a jacket and sent it to her."],
+        explain: "標準翻譯：We bought a jacket and sent it to her."
+      },
+      {
+        id: "tr4", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "北海道（Hokkaido）冬天下很多雪。（用 There is...開頭）",
+        hint: "There is a lot of snow in Hokkaido in winter.",
+        ansList: [
+          "There is a lot of snow in Hokkaido in winter.",
+          "There is lots of snow in Hokkaido in winter."
+        ],
+        explain: "標準翻譯：There is a lot of snow in Hokkaido in winter."
+      },
+      {
+        id: "tr5", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "今天天氣如何？（用 What 開頭）",
+        hint: "What is the weather like today?",
+        ansList: [
+          "What is the weather like today?",
+          "What's the weather like today?"
+        ],
+        explain: "標準翻譯：What is the weather like today?"
+      },
+      {
+        id: "tr6", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "那是一個很好的粉紅色滑雪板。",
+        hint: "That's a nice pink snowboard.",
+        ansList: [
+          "That's a nice pink snowboard.",
+          "That is a nice pink snowboard."
+        ],
+        explain: "標準翻譯：That's a nice pink snowboard."
+      },
+      {
+        id: "tr7", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "我做了一個大餅乾給你。（... for...）",
+        hint: "I made a big cookie for you.",
+        ansList: ["I made a big cookie for you."],
+        explain: "標準翻譯：I made a big cookie for you."
+      },
+      {
+        id: "tr8", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "我去一間咖啡廳，並點了餅乾。",
+        hint: "I went to a coffee shop and ordered cookies.",
+        ansList: ["I went to a coffee shop and ordered cookies."],
+        explain: "標準翻譯：I went to a coffee shop and ordered cookies."
+      },
+      {
+        id: "tr9", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "你為什麼穿著粉紅色的夾克？（... in...）",
+        hint: "Why were you in a pink jacket? (或 Why are you in a pink jacket?)",
+        ansList: [
+          "Why were you in a pink jacket?",
+          "Why are you in a pink jacket?"
+        ],
+        explain: "標準翻譯：Why were you in a pink jacket?"
+      },
+      {
+        id: "tr10", cat: "translation", catLabel: "🎈 十、翻譯", score: 1, type: "text",
+        prompt: "我從臺北寄了一張明信片給你。",
+        hint: "I sent you a postcard from Taipei.",
+        ansList: ["I sent you a postcard from Taipei."],
+        explain: "標準翻譯：I sent you a postcard from Taipei."
+      }
+    ];
+
+    // Global Interactive State
+    let activeQuestionList = [...RAW_QUESTIONS];
+    let currentIndex = 0;
+    let earnedScore = 0;
+    let comboCount = 0;
+    let capturedPokemon = 0;
+    let isCurrentAnswered = false;
+    let soundEnabled = true;
+    let wrongQuestionsHistory = [];
+    let audioCtx = null;
+
+    // Pokemon Companion Avatars & Quotes
+    const POKEMON_ROSTER = [
+      { name: "皮卡丘", icon: "⚡", quote: "Pika Pika! 字體大又清楚，衝呀！" },
+      { name: "伊布", icon: "🦊", quote: "Eevee! 你最棒了！" },
+      { name: "小火龍", icon: "🔥", quote: "熱血沸騰！看清題目一口氣收服！" },
+      { name: "傑尼龜", icon: "🐢", quote: "冷靜思考！題目很簡單！" },
+      { name: "妙蛙種子", icon: "🍃", quote: "種子種子！加油！" }
+    ];
+    let currentPokemonIdx = 0;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) audioCtx = new AudioContext();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSound(type) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          // Poke Catch Success Fanfare: Bright Arpeggio
+          const freqs = [523.25, 659.25, 783.99, 1046.50];
+          freqs.forEach((f, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, now + i * 0.07);
+            gain.gain.setValueAtTime(0.18, now + i * 0.07);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.22);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + i * 0.07);
+            osc.stop(now + i * 0.07 + 0.23);
+          });
+        } else if (type === 'wrong') {
+          // Pokemon Fleed Buzzer
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(185, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.25);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.26);
+        } else if (type === 'fanfare') {
+          // Gym Victory Fanfare
+          const chords = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+          chords.forEach((f, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(f, now + i * 0.1);
+            gain.gain.setValueAtTime(0.15, now + i * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.45);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + i * 0.1);
+            osc.stop(now + i * 0.1 + 0.46);
+          });
+        }
+      } catch (err) {
+        console.warn("Sound playback error:", err);
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById("sound-btn");
+      btn.innerText = soundEnabled ? "🔊" : "🔇";
+    }
+
+    function pokeInteract() {
+      currentPokemonIdx = (currentPokemonIdx + 1) % POKEMON_ROSTER.length;
+      const p = POKEMON_ROSTER[currentPokemonIdx];
+      const avatar = document.getElementById("poke-avatar");
+      const bubble = document.getElementById("poke-bubble");
+      avatar.innerText = p.icon;
+      avatar.classList.add("anim-jump");
+      bubble.innerText = `${p.name}: ${p.quote}`;
+      setTimeout(() => avatar.classList.remove("anim-jump"), 600);
+    }
+
+    function renderQuestion() {
+      if (currentIndex >= activeQuestionList.length) {
+        showFinalResults();
+        return;
+      }
+
+      isCurrentAnswered = false;
+      const q = activeQuestionList[currentIndex];
+
+      // Update Header Progress & EXP
+      const pct = Math.round((currentIndex / activeQuestionList.length) * 100);
+      document.getElementById("progress-percent").innerText = `${pct}%`;
+      document.getElementById("exp-bar").style.width = `${pct}%`;
+      document.getElementById("q-number-tag").innerText = `第 ${currentIndex + 1} / ${activeQuestionList.length} 題`;
+      document.getElementById("q-category-tag").innerText = q.catLabel;
+
+      // Update Trainer Level
+      const trainerLevel = Math.min(99, Math.floor(earnedScore / 3) + 1);
+      document.getElementById("level-badge").innerText = `⚡ LV.${trainerLevel} 訓練家`;
+      document.getElementById("captured-count").innerText = `已收服: ${capturedPokemon} 隻`;
+
+      // Context Box
+      const contextBox = document.getElementById("q-context-box");
+      if (q.context) {
+        contextBox.innerHTML = q.context;
+        contextBox.classList.remove("hidden");
+      } else {
+        contextBox.classList.add("hidden");
+      }
+
+      // Prompt (Extra large font via .prompt-text class)
+      document.getElementById("q-prompt").innerHTML = q.prompt;
+
+      // Sub-hint
+      const subHint = document.getElementById("q-sub-hint");
+      if (q.hint) {
+        subHint.innerText = `💡 提示：${q.hint}`;
+        subHint.classList.remove("hidden");
+      } else {
+        subHint.classList.add("hidden");
+      }
+
+      // Hide Feedback panel
+      document.getElementById("feedback-panel").classList.add("hidden");
+
+      // Reset Pokemon Mood
+      const p = POKEMON_ROSTER[currentPokemonIdx];
+      document.getElementById("poke-bubble").innerText = comboCount >= 2 ? `🔥 ${comboCount} 連勝中！` : `${p.name}: 專心看題！`;
+
+      // Render Answer Zone (Large Choice Buttons vs Large Text Input)
+      const answerZone = document.getElementById("q-answer-zone");
+      answerZone.innerHTML = "";
+
+      if (q.type === "choice") {
+        // 2x2 Grid on md+, compact py-2.5 to py-3.5 with big font to guarantee zero scroll
+        const grid = document.createElement("div");
+        grid.className = "grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3";
+
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((optText, idx) => {
+          const letter = letters[idx];
+          const btn = document.createElement("button");
+          btn.id = `opt-btn-${letter}`;
+          btn.className = "poke-opt w-full px-3.5 py-2 sm:px-4 sm:py-3 rounded-2xl border-3 border-amber-200 bg-amber-50/50 hover:bg-white hover:border-amber-400 flex items-center gap-3 shadow-sm text-left group";
+          btn.onclick = () => handleChoiceAnswer(letter);
+
+          btn.innerHTML = `
+            <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-200 group-hover:bg-poke-yellow text-amber-950 font-black flex items-center justify-center badge-letter shrink-0 border-2 border-amber-300">
+              ${letter}
+            </span>
+            <span class="option-text font-black text-stone-800 truncate">${optText}</span>
+          `;
+          grid.appendChild(btn);
+        });
+        answerZone.appendChild(grid);
+      } else {
+        // Big Text Input Box
+        const wrapper = document.createElement("div");
+        wrapper.className = "flex items-center gap-2 sm:gap-3";
+
+        wrapper.innerHTML = `
+          <div class="relative flex-1">
+            <input type="text" id="user-text-input" 
+                   placeholder="${q.hint ? q.hint : '請在此輸入英文答案...'}"
+                   autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                   class="w-full px-4 py-3 sm:py-3.5 text-base sm:text-xl md:text-2xl font-black text-stone-900 bg-amber-50/80 border-3 sm:border-4 border-amber-300 rounded-2xl focus:outline-none focus:border-poke-blue focus:bg-white transition shadow-sm" />
+          </div>
+          <button id="submit-text-btn" onclick="handleTextAnswer()" 
+                  class="shrink-0 px-5 py-3 sm:px-8 sm:py-3.5 bg-poke-yellow hover:bg-amber-400 text-amber-950 font-black text-base sm:text-xl rounded-2xl shadow-pixel-btn active:shadow-pixel-btn-active active:translate-y-0.5 transition flex items-center gap-2 border-2 border-amber-400">
+            <span>收服</span>
+            <span class="text-base sm:text-xl">⚡</span>
+          </button>
+        `;
+        answerZone.appendChild(wrapper);
+
+        // Autofocus & Enter listener
+        setTimeout(() => {
+          const input = document.getElementById("user-text-input");
+          if (input) {
+            input.focus();
+            input.addEventListener("keydown", (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleTextAnswer();
+              }
+            });
+          }
+        }, 50);
+      }
+    }
+
+    function handleChoiceAnswer(selectedLetter) {
+      if (isCurrentAnswered) return;
+      isCurrentAnswered = true;
+
+      const q = activeQuestionList[currentIndex];
+      const isCorrect = (selectedLetter === q.ans);
+
+      // Lock buttons & visual feedback
+      ["A", "B", "C", "D"].forEach(letter => {
+        const btn = document.getElementById(`opt-btn-${letter}`);
+        if (btn) {
+          btn.disabled = true;
+          if (letter === q.ans) {
+            btn.className = "w-full px-3.5 py-2 sm:px-4 sm:py-3 rounded-2xl border-4 border-emerald-500 bg-emerald-100 text-emerald-950 flex items-center gap-3 shadow-md";
+            btn.querySelector("span:first-child").className = "w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500 text-white font-black flex items-center justify-center badge-letter shrink-0";
+          } else if (letter === selectedLetter && !isCorrect) {
+            btn.className = "w-full px-3.5 py-2 sm:px-4 sm:py-3 rounded-2xl border-4 border-rose-500 bg-rose-100 text-rose-950 flex items-center gap-3 shadow-md";
+            btn.querySelector("span:first-child").className = "w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-rose-500 text-white font-black flex items-center justify-center badge-letter shrink-0";
+          } else {
+            btn.className = "w-full px-3.5 py-2 sm:px-4 sm:py-3 rounded-2xl border-2 border-stone-200 bg-stone-50 opacity-40 flex items-center gap-3";
+          }
+        }
+      });
+
+      applyGradingResult(isCorrect, `正解：<strong>(${q.ans})</strong>`);
+    }
+
+    function cleanStr(s) {
+      if (!s) return "";
+      return s
+        .toLowerCase()
+        .replace(/[’']/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/[，,]/g, ',')
+        .replace(/[。.]/g, '.')
+        .replace(/[？?]/g, '?')
+        .replace(/[！!]/g, '!')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function handleTextAnswer() {
+      if (isCurrentAnswered) return;
+      const input = document.getElementById("user-text-input");
+      if (!input) return;
+
+      const userVal = input.value.trim();
+      if (!userVal) {
+        input.focus();
+        input.classList.add("ring-4", "ring-rose-400");
+        setTimeout(() => input.classList.remove("ring-4", "ring-rose-400"), 400);
+        return;
+      }
+
+      isCurrentAnswered = true;
+      input.disabled = true;
+
+      const q = activeQuestionList[currentIndex];
+      const uNorm = cleanStr(userVal);
+      const uNoPunct = uNorm.replace(/[.,?!]/g, '').trim();
+
+      let isCorrect = false;
+      for (let a of q.ansList) {
+        const aNorm = cleanStr(a);
+        const aNoPunct = aNorm.replace(/[.,?!]/g, '').trim();
+        if (uNorm === aNorm || uNoPunct === aNoPunct) {
+          isCorrect = true;
+          break;
+        }
+      }
+
+      if (isCorrect) {
+        input.className = "w-full px-4 py-3 sm:py-3.5 text-base sm:text-xl md:text-2xl font-black text-emerald-950 bg-emerald-100 border-4 border-emerald-500 rounded-2xl";
+      } else {
+        input.className = "w-full px-4 py-3 sm:py-3.5 text-base sm:text-xl md:text-2xl font-black text-rose-950 bg-rose-100 border-4 border-rose-500 rounded-2xl";
+      }
+
+      applyGradingResult(isCorrect, `標準答案：<strong>${q.ansList[0]}</strong>`);
+    }
+
+    function applyGradingResult(isCorrect, ansHtml) {
+      const q = activeQuestionList[currentIndex];
+      const panel = document.getElementById("feedback-panel");
+      const banner = document.getElementById("feedback-banner");
+      const icon = document.getElementById("feedback-icon");
+      const title = document.getElementById("feedback-title");
+      const detail = document.getElementById("feedback-detail");
+      const avatar = document.getElementById("poke-avatar");
+      const bubble = document.getElementById("poke-bubble");
+      const streakEl = document.getElementById("streak-indicator");
+
+      panel.classList.remove("hidden");
+
+      if (isCorrect) {
+        earnedScore += q.score;
+        comboCount++;
+        capturedPokemon++;
+        playSound('correct');
+
+        avatar.classList.add("anim-jump");
+        setTimeout(() => avatar.classList.remove("anim-jump"), 600);
+        bubble.innerText = comboCount >= 3 ? `太神啦！${comboCount} 連續收服！` : "成功擊中！太棒了！";
+
+        banner.className = "p-2 sm:p-3.5 rounded-2xl flex items-center justify-between gap-3 bg-emerald-50 border-3 sm:border-4 border-emerald-400 text-emerald-950";
+        icon.innerText = "⭐";
+        title.innerText = "收服成功！獲得經驗值！";
+        detail.innerHTML = `${ansHtml} ${q.explain ? `• <span class='text-stone-700 font-bold'>${q.explain}</span>` : ''}`;
+
+      } else {
+        comboCount = 0;
+        playSound('wrong');
+
+        avatar.classList.add("anim-shake");
+        setTimeout(() => avatar.classList.remove("anim-shake"), 500);
+        bubble.innerText = "野生寶可夢逃跑了... 沒關係下一題再收服！";
+
+        if (!wrongQuestionsHistory.some(item => item.id === q.id)) {
+          wrongQuestionsHistory.push(q);
+        }
+
+        banner.className = "p-2 sm:p-3.5 rounded-2xl flex items-center justify-between gap-3 bg-rose-50 border-3 sm:border-4 border-rose-400 text-rose-950";
+        icon.innerText = "💨";
+        title.innerText = "差一點點！寶可夢逃走了：";
+        detail.innerHTML = `${ansHtml} ${q.explain ? `• <span class='text-stone-700 font-bold'>${q.explain}</span>` : ''}`;
+      }
+
+      streakEl.innerText = `🔥 ${comboCount} 連勝`;
+      document.getElementById("captured-count").innerText = `已收服: ${capturedPokemon} 隻`;
+
+      setTimeout(() => {
+        const nextBtn = document.getElementById("next-btn");
+        if (nextBtn) nextBtn.focus();
+      }, 50);
+    }
+
+    function goToNextQuestion() {
+      currentIndex++;
+      renderQuestion();
+    }
+
+    function skipQuestion() {
+      if (isCurrentAnswered) {
+        goToNextQuestion();
+        return;
+      }
+      const q = activeQuestionList[currentIndex];
+      if (!wrongQuestionsHistory.some(item => item.id === q.id)) {
+        wrongQuestionsHistory.push(q);
+      }
+      comboCount = 0;
+      document.getElementById("streak-indicator").innerText = "🔥 0 連勝";
+      currentIndex++;
+      renderQuestion();
+    }
+
+    // Keyboard Shortcuts: Enter to advance, 1/2/3/4 or A/B/C/D to answer instantly
+    window.addEventListener("keydown", (e) => {
+      const panel = document.getElementById("feedback-panel");
+      if (!panel.classList.contains("hidden") && (e.key === "Enter" || e.code === "Space")) {
+        if (document.activeElement.id !== "user-text-input") {
+          e.preventDefault();
+          goToNextQuestion();
+        }
+      }
+
+      if (!isCurrentAnswered && activeQuestionList[currentIndex]?.type === "choice") {
+        const map = { 'a': 'A', 'b': 'B', 'c': 'C', 'd': 'D', '1': 'A', '2': 'B', '3': 'C', '4': 'D' };
+        const key = e.key.toLowerCase();
+        if (map[key]) {
+          e.preventDefault();
+          handleChoiceAnswer(map[key]);
+        }
+      }
+    });
+
+    function changeCategory(catKey) {
+      if (catKey === "all") {
+        activeQuestionList = [...RAW_QUESTIONS];
+      } else {
+        activeQuestionList = RAW_QUESTIONS.filter(q => q.cat === catKey);
+      }
+      restartCurrentSet();
+    }
+
+    function restartCurrentSet() {
+      currentIndex = 0;
+      earnedScore = 0;
+      comboCount = 0;
+      capturedPokemon = 0;
+      isCurrentAnswered = false;
+      document.getElementById("streak-indicator").innerText = "🔥 0 連勝";
+      closeModal();
+      renderQuestion();
+    }
+
+    function startReviewWrongOnly() {
+      if (wrongQuestionsHistory.length === 0) return;
+      activeQuestionList = [...wrongQuestionsHistory];
+      wrongQuestionsHistory = [];
+      restartCurrentSet();
+    }
+
+    function showFinalResults() {
+      playSound('fanfare');
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 140, spread: 85, origin: { y: 0.6 } });
+      }
+
+      let totalPoints = 0;
+      activeQuestionList.forEach(q => totalPoints += q.score);
+
+      const finalScore = Math.round(earnedScore * 10) / 10;
+      const accuracy = Math.round((finalScore / totalPoints) * 100);
+      const wrongCount = wrongQuestionsHistory.length;
+      const correctCount = activeQuestionList.length - wrongCount;
+
+      document.getElementById("res-score").innerHTML = `${finalScore} <span class="text-xl text-stone-500 font-bold">/ ${totalPoints} 分</span>`;
+      document.getElementById("res-accuracy").innerText = `${accuracy}%`;
+      document.getElementById("res-correct-count").innerText = `${correctCount} 隻`;
+      document.getElementById("res-wrong-count").innerText = `${wrongCount} 隻`;
+
+      const rankLabel = document.getElementById("res-rank-label");
+      if (accuracy >= 90) {
+        rankLabel.innerText = "👑 寶可夢大師！太神啦！";
+      } else if (accuracy >= 80) {
+        rankLabel.innerText = "🌟 道館館主級強者！";
+      } else if (accuracy >= 60) {
+        rankLabel.innerText = "⚡ 優秀的精靈訓練家！";
+      } else {
+        rankLabel.innerText = "🌱 初階訓練家，重練再戰！";
+      }
+
+      const reviewBtn = document.getElementById("review-wrong-btn");
+      if (wrongCount > 0) {
+        reviewBtn.classList.remove("hidden");
+        document.getElementById("wrong-count-txt").innerText = wrongCount;
+      } else {
+        reviewBtn.classList.add("hidden");
+      }
+
+      document.getElementById("result-modal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("result-modal").classList.add("hidden");
+    }
+
+    window.onload = function() {
+      renderQuestion();
+    };
+  </script>
+</body>
+</html>
